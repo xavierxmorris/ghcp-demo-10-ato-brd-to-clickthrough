@@ -38,7 +38,7 @@
   [ ok ] TC-043  REQ-006  (1A $8,000 − 1B $3,200) + W2 $7,100 + T7 $2,600
   [ ok ] TC-050  REQ-008  all eight entered values replayed exactly
   [ ok ] TC-051  REQ-007 BR-08  Confirm the declaration before you lodge. (BR-08)
-  [ ok ] TC-052  REQ-008  LA-2026Q2-Z98CBN · Lodged 24 August 2026 at 3:19 pm · in a real service a receipt wo
+  [ ok ] TC-052  REQ-008  LA-2026Q2-877W79 · Lodged 24 August 2026 at 5:42 pm · in a real service a receipt wo
   [ ok ] TC-053  BR-09  144 resource requests, all file://
   [ ok ] TC-054  REQ-002 BR-09  fields, errors, ARIA state and the overlay all cleared
   [ ok ] TC-060  REQ-001 REQ-008  6/6 screens declare a reference
@@ -88,7 +88,7 @@
   [ ok ] TC-043  REQ-006  (1A $8,000 − 1B $3,200) + W2 $7,100 + T7 $2,600
   [ ok ] TC-050  REQ-008  all eight entered values replayed exactly
   [ ok ] TC-051  REQ-007 BR-08  Confirm the declaration before you lodge. (BR-08)
-  [ ok ] TC-052  REQ-008  LA-2026Q2-YFF3ZU · Lodged 24 August 2026 at 3:20 pm · in a real service a receipt wo
+  [ ok ] TC-052  REQ-008  LA-2026Q2-6B56VB · Lodged 24 August 2026 at 5:43 pm · in a real service a receipt wo
   [ ok ] TC-053  BR-09  148 resource requests, all file://
   [ ok ] TC-054  REQ-002 BR-09  fields, errors, ARIA state and the overlay all cleared
   [ ok ] TC-060  REQ-001 REQ-008  7/7 screens declare a reference

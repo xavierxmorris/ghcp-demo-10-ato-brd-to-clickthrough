@@ -1,0 +1,341 @@
+=== ONE-SHOT LIVE BUILD ===
+started: 2026-08-24 17:02:11 +10:00
+● gel-guidance canvas ready — open it to explore the Division 1 audit.
+
+● gel-guidance canvas ready — open it to explore the Division 1 audit.
+
+I'll start by reading the BRD and the design system.
+
+● List repository files (shell)
+  │ Get-ChildItem -Path . -Recurse -Depth 2 -File | Select-Object FullName, Length | Format-Table
+  │ -AutoSize
+  └ 50 lines…
+
+Playwright-core is available for browser verification. Reading the BRD and design system now.
+
+● Read ato-bas-lodgment-brd.html
+  │ brd\ato-bas-lodgment-brd.html
+  └ 375 lines read
+
+● Read screens.css
+  │ assets\screens.css
+  └ 1 line read
+
+BRD is clear. Now reading the design system in full.
+
+● Read screens.css
+  │ assets\screens.css
+  └ L1:320 (320 lines read)
+
+● Read screens.css
+  │ assets\screens.css
+  └ L320:700 (381 lines read)
+
+● Read screens.css
+  │ assets\screens.css
+  └ L700:900 (81 lines read)
+
+Now let me check the existing prototype's markup idioms and the Playwright setup (read-only).
+
+● Read index.html
+  │ prototype-v2\index.html
+  └ L1:90 (90 lines read)
+
+✗ Check Playwright browsers installed and package.json (shell)
+  │ Get-ChildItem -Path "$env:USERPROFILE\AppData\Local\ms-playwright" -ErrorAction SilentlyContinue
+  │ | Select-Object Name; Write-Host "---package---"; Get-Content package.json
+  └ Permission denied and could not request permission from user
+
+Design system understood. Creating the prototype now.
+
+● Create prototype-live folder and generate valid demo ABNs (shell)
+  │ New-Item -ItemType Directory -Path "prototype-live" -Force | Out-Null; node -e "
+  │ function ok(d){const w=[10,1,3,5,7,9,11,13,15,17,19];let s=(+d[0]-1)*w[0];for(let
+  │ i=1;i<11;i++)s+=+d[i]*w[i];return s%89===0;}
+  │ const out=[];
+  │ for(let n=0;n<400000 && out.length<6;n++){…
+  └ 17 lines…
+
+● Generate realistic valid demo ABNs (shell)
+  │ node -e "
+  │ function ok(d){const w=[10,1,3,5,7,9,11,13,15,17,19];let s=(+d[0]-1)*w[0];for(let
+  │ i=1;i<11;i++)s+=+d[i]*w[i];return s%89===0;}
+  │ const prefixes=['372614','486203','659147','218036','745912'];
+  │ const res=[];…
+  └ 18 lines…
+
+Valid demo ABN generated: `74 591 200 760`. Now writing the prototype files.
+
+● Create index.html +430
+  └ prototype-live\index.html
+
+● Create prototype.css +306
+  └ prototype-live\prototype.css
+
+● Create app.js +566
+  └ prototype-live\app.js
+
+Now verifying in a real browser with Playwright. Writing the check script into the session workspace
+(outside the repo).
+
+● Create verify-live.mjs +456
+  └ ~\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\verify-live.mjs
+
+● Run browser verification of prototype-live (shell)
+  │ $env:NODE_PATH="C:\Users\xaviermorris\ghcp-demos\ghcp-demo-10-ato-brd-to-clickthrough\node_modul
+  │ es"; node "C:\Users\xaviermorris\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\fil
+  │ es\verify-live.mjs" 2>&1 | Select-Object -Last 120
+  └ 21 lines…
+
+● Edit verify-live.mjs +3 -1
+  └ ~\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\verify-live.mjs
+
+● Run browser verification of prototype-live (shell)                                             42s
+  │ node "C:\Users\xaviermorris\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\ve
+  │ rify-live.mjs" 2>&1 | Select-Object -Last 140
+  └ 141 lines…
+
+Two issues found: a review-screen height measurement to investigate, and a script bug. Let me diagnose the review screen directly.
+
+● Create diag.mjs +38
+  └ ~\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\diag.mjs
+
+● Diagnose review screen layout heights (shell)                                                   5s
+  │ node "C:\Users\xaviermorris\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\di
+  │ ag.mjs"
+  └ 18 lines…
+
+Found a real bug: `.summary`/`.calc` blocks (which have `overflow:hidden`) get zero automatic minimum size in the grid scroll area, so the grid squashed them to ~57px and clipped their content. Fixing with `grid-auto-rows: max-content`.
+
+● Edit prototype.css +7
+  └ prototype-live\prototype.css
+
+● Edit verify-live.mjs +2 -2
+  └ ~\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\verify-live.mjs
+
+● Edit verify-live.mjs +8
+  └ ~\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\verify-live.mjs
+
+● Edit verify-live.mjs +2 -2
+  └ ~\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\verify-live.mjs
+
+● Edit verify-live.mjs +1 -1
+  └ ~\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\verify-live.mjs
+
+● Re-run browser verification with screenshots (shell)                                           20s
+  │ $shots="C:\Users\xaviermorris\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\
+  │ shots"; New-Item -ItemType Directory -Path $shots -Force | Out-Null; node "C:\Users\xaviermorris
+  │ \.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\verify-live.mjs" $shots 2>&1
+  │ | Select-String -Pattern "FAIL|passed|FAILURES|^ -" | Select-Object -Last 40
+  └ 3 lines…
+
+All 189 checks pass. Let me look at the actual rendering.
+
+● Read s1-intro.png
+  │ ~\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\shots\s1-intro.png
+  └ 1 line read
+
+  [Image: Image file at path C:\Users\xaviermorris\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c
+  6cd6a5621a\files\shots\s1-intro.png [image/png] 1280x1100]
+
+● Read s2-entity-refused.png
+  │ ~\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\shots\s2-entity-refused.png
+  └ 1 line read
+
+  [Image: Image file at path C:\Users\xaviermorris\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c
+  6cd6a5621a\files\shots\s2-entity-refused.png [image/png] 1280x1121]
+
+Screens render well. One visual issue: the scroll note overlays the last field. Making it occupy permanently reserved space instead so it never covers content.
+
+● Edit prototype.css +8 -6
+  └ prototype-live\prototype.css
+
+● Re-run verification after scroll-note layout change (shell)                                    21s
+  │ $shots="C:\Users\xaviermorris\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\
+  │ shots"; node "C:\Users\xaviermorris\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\
+  │ files\verify-live.mjs" $shots 2>&1 | Select-Object -Last 12
+  └ 13 lines…
+
+● Read s5-net.png
+  │ ~\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\shots\s5-net.png
+  └ 1 line read
+
+  [Image: Image file at path C:\Users\xaviermorris\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c
+  6cd6a5621a\files\shots\s5-net.png [image/png] 1280x1100]
+
+● Read s6-review.png
+  │ ~\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\shots\s6-review.png
+  └ 1 line read
+
+  [Image: Image file at path C:\Users\xaviermorris\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c
+  6cd6a5621a\files\shots\s6-review.png [image/png] 1280x1121]
+
+Fixing money values wrapping in summary rows and tightening the calc headings.
+
+● Edit prototype.css +1 -2
+  └ prototype-live\prototype.css
+
+● Read prototype.css
+  │ prototype-live\prototype.css
+  └ L160:200 (40 lines read)
+
+● Edit app.js +3 -3
+  └ prototype-live\app.js
+
+● Edit prototype.css +10 -1
+  └ prototype-live\prototype.css
+
+● Edit app.js +1 -1
+  └ prototype-live\app.js
+
+● Edit index.html +3 -3
+  └ prototype-live\index.html
+
+● Edit index.html +1 -1
+  └ prototype-live\index.html
+
+● Edit index.html +1 -1
+  └ prototype-live\index.html
+
+● Edit verify-live.mjs +1 -2
+  └ ~\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\verify-live.mjs
+
+● Edit verify-live.mjs +6
+  └ ~\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\verify-live.mjs
+
+● Edit verify-live.mjs +1
+  └ ~\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\verify-live.mjs
+
+● Re-run verification with value-wrap checks (shell)                                             20s
+  │ $shots="C:\Users\xaviermorris\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\
+  │ shots"; node "C:\Users\xaviermorris\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\
+  │ files\verify-live.mjs" $shots 2>&1 | Select-Object -Last 15
+  └ 16 lines…
+
+Those are the 26px `.calc-out .amount` at normal line-height, not wrapping. Tightening the check per element type.
+
+● Edit verify-live.mjs +9 -3
+  └ ~\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\verify-live.mjs
+
+● Re-run full verification (shell)                                                               20s
+  │ $shots="C:\Users\xaviermorris\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\
+  │ shots"; node "C:\Users\xaviermorris\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\
+  │ files\verify-live.mjs" $shots 2>&1 | Select-Object -Last 12
+  └ 13 lines…
+
+204/204 passing. Let me confirm the remaining screens visually.
+
+● Read s7-done.png
+  │ ~\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\shots\s7-done.png
+  └ 1 line read
+
+  [Image: Image file at path C:\Users\xaviermorris\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c
+  6cd6a5621a\files\shots\s7-done.png [image/png] 1280x1100]
+
+● Read s6-review-refs.png
+  │ ~\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\shots\s6-review-refs.png
+  └ 1 line read
+
+  [Image: Image file at path C:\Users\xaviermorris\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c
+  6cd6a5621a\files\shots\s6-review-refs.png [image/png] 1280x1121]
+
+Only remaining nit: in refs mode the badge covers the EDIT buttons. Moving those badges to wrappers so they sit above the block.
+
+● Edit index.html +21 -15
+  └ prototype-live\index.html
+
+● Re-verify after review summary wrapper change (shell)                                          21s
+  │ $shots="C:\Users\xaviermorris\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\
+  │ shots"; node "C:\Users\xaviermorris\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\
+  │ files\verify-live.mjs" $shots 2>&1 | Select-Object -Last 8
+  └ 9 lines…
+
+● Read s6-review-refs.png
+  │ ~\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\shots\s6-review-refs.png
+  └ 1 line read
+
+  [Image: Image file at path C:\Users\xaviermorris\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c
+  6cd6a5621a\files\shots\s6-review-refs.png [image/png] 1280x1121]
+
+● Read s3-gst.png
+  │ ~\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\shots\s3-gst.png
+  └ 1 line read
+
+  [Image: Image file at path C:\Users\xaviermorris\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c
+  6cd6a5621a\files\shots\s3-gst.png [image/png] 1280x1121]
+
+Journey verified end to end. Final check that nothing outside `prototype-live` changed.
+
+● Confirm only prototype-live changed (shell)
+  │ git -C "C:\Users\xaviermorris\ghcp-demos\ghcp-demo-10-ato-brd-to-clickthrough" --no-pager
+  │ status --porcelain; Write-Host "--- screens.css integrity ---"; git -C
+  │ "C:\Users\xaviermorris\ghcp-demos\ghcp-demo-10-ato-brd-to-clickthrough" --no-pager diff --stat
+  │ -- assets/screens.css prototype prototype-v2 testing brd; Write-Host "(empty above =
+  │ untouched)"; Write-Host "--- prototype-live contents ---"; Get-ChildItem …
+  └ 14 lines…
+
+● Read .gitignore
+  └ 14 lines read
+
+● Check gitignore and whether go.ps1 was pre-modified (shell)
+  │ git -C "C:\Users\xaviermorris\ghcp-demos\ghcp-demo-10-ato-brd-to-clickthrough" --no-pager diff
+  │ --stat -- go.ps1; Write-Host "--- go.ps1 last write ---"; (Get-Item
+  │ "C:\Users\xaviermorris\ghcp-demos\ghcp-demo-10-ato-brd-to-clickthrough\go.ps1").LastWriteTime
+  └ 6 lines…
+
+`prototype-live/` is gitignored by design; `go.ps1` was modified at 5:02 PM, before this session started. Cleaning up scratch and doing a final end-to-end pass.
+
+/ Search (grep)
+  │ "prototype-live" (go.ps1)
+  └ 7 lines found
+
+● Remove scratch diagnostic script (shell)
+  │ Remove-Item "C:\Users\xaviermorris\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\f
+  │ iles\diag.mjs" -Force; Write-Host "removed scratch diag.mjs"
+  └ 2 lines…
+
+● Read s2-entity-refused.png
+  │ ~\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c6cd6a5621a\files\shots\s2-entity-refused.png
+  └ 1 line read
+
+  [Image: Image file at path C:\Users\xaviermorris\.copilot\session-state\b2ac992c-4fb0-4334-a610-6c
+  6cd6a5621a\files\shots\s2-entity-refused.png [image/png] 1280x1121]
+
+Done. `prototype-live/` — 3 files (`index.html`, `prototype.css`, `app.js`), links `../assets/screens.css` unmodified, no server/framework/library/build/CDN. Verified in real Edge via Playwright from `file://`: **204/204 checks passed**, zero console errors, frame exactly 390×844 in every state including all-fields-refused and refs-on.
+
+**Screen → requirement trace** (live from each section's `data-req`)
+
+| # | Screen | Satisfies |
+|---|---|---|
+| 1 | Introduction | REQ-001, REQ-002, BR-09, NFR-01, NFR-04 |
+| 2 | Your business | REQ-002, REQ-003, REQ-007, BR-01, BR-02, BR-03, NFR-01–04 |
+| 3 | GST labels | REQ-002, REQ-004, REQ-007, BR-04, BR-05, NFR-01–04 |
+| 4 | PAYG labels | REQ-002, REQ-005, REQ-007, BR-04, BR-06, NFR-01–04 |
+| 5 | Net amount | REQ-002, REQ-006, BR-07, NFR-01, NFR-04 |
+| 6 | Review & declare | REQ-002, REQ-006, REQ-007, REQ-008, BR-07, BR-08, BR-09, NFR-01–04 |
+| 7 | Confirmation | REQ-008, BR-09, NFR-01, NFR-04 |
+
+**Decisions the BRD didn't specify**
+- **Journey shape** — five numbered steps with the net amount on its own screen before review, so REQ-006's "before lodgment" is literal.
+- **BR-04 cents** — any decimal point is refused, including `.00`. "Cents are not accepted" read strictly.
+- **BR-04 12 digits** — counted after stripping leading zeros (value-based reading).
+- **BR-05/BR-06 boundaries** — equality passes; only strictly greater is refused. Skipped when the compared label is itself already refused.
+- **BR-03** — "structurally valid" implemented as local@domain.tld; no MX/deliverability check.
+- **Refusal wording** — the rule code is a chip inside the message text (e.g. `BR-01 Enter the ABN…`), plus a non-colour `!` icon and a `role="alert"` summary naming the rules (NFR-02/03).
+- **NFR-04 scroll notice** — a permanently reserved 24px strip; text swaps between "more below" and "end of this screen". Reserved always so toggling can never shift or clip layout.
+- **Test data** — ABN `74 591 200 760` (valid check digit, shown in the hint) so testers can pass BR-01 without a lookup. No prefill button, to keep the "not sample data" acceptance criterion honest.
+- **Receipt/timestamp** — format `AS-YYMM-XXXX-NNNN`, generated client-side; date/time from the device clock.
+- **Extras** — "Edit" jumps from review back to any step (data preserved), and a "Start a new statement" reset.
+
+**One real bug found and fixed during verification:** `.summary`/`.calc` have `overflow:hidden`, which gives them a zero automatic minimum size as grid items — the design system's `.field-stack` grid was squashing them to ~57px and clipping the review content. Fixed with `grid-auto-rows: max-content` on my scroll wrapper (`screens.css` untouched).
+
+Nothing outside `prototype-live/` was modified — `assets/screens.css`, `prototype/`, `prototype-v2/`, `testing/` and `brd/` show no diff. (`go.ps1` shows as modified from before this session started, at 5:02 PM.)
+
+
+
+Changes    +1885 -44
+AI Credits 607.41 (21m 39s)
+Tokens     ↑ 5.6m (5.4m cached, 182.5k written) • ↓ 87.8k (39.0k reasoning)
+Resume     copilot --resume=b2ac992c-4fb0-4334-a610-6c6cd6a5621a
+
+finished: 2026-08-24 17:24:24 +10:00  wall clock: 00:22:12

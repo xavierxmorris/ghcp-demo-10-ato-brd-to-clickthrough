@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lodge Assist &mdash; quarterly activity statement (click-through prototype)</title>
+<meta name="description" content="Click-through prototype built from BRD-2026-118. Illustrative demonstration only — not an ATO service. Nothing is sent, stored or lodged.">
+<!-- The house design system, linked unmodified (BRD section 6). -->
+<link rel="stylesheet" href="../assets/screens.css">
+<link rel="stylesheet" href="prototype.css">
+</head>
+<body>
+
+<div class="stage" id="stage">
+
+  <p class="stage-note" role="note">
+    <b>Demonstration prototype.</b> Not an ATO service. Nothing you type is sent, stored or lodged
+    (<span class="rule-inline">BR-09</span>). Figures and rules are invented &mdash; this is not tax advice.
+  </p>
+
+  <div class="device">
+    <div class="frame" id="frame">
+
+      <div class="official-bar"><i>Demo</i> Not an ATO service &middot; nothing is lodged</div>
+
+      <div class="status-bar">
+        <span id="clock">9:41</span>
+        <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="battery" aria-hidden="true"></span>
+      </div>
+
+      <!-- ============================================== screen 1 : introduction -->
+      <section class="screen" id="scr-intro" data-screen="1" data-title="Introduction"
+               data-req="REQ-001, REQ-002, BR-09, NFR-01, NFR-04">
+        <div class="frame-body">
+
+          <div class="brandmark" data-ref="REQ-001"><span class="glyph" aria-hidden="true"></span> Lodge Assist</div>
+
+          <p class="eyebrow" style="margin-top:14px">Business activity statement</p>
+          <h1 class="display" tabindex="-1">Lodge this quarter in <span class="grad">about five&nbsp;minutes</span></h1>
+
+          <div class="hero-art ref-in" data-ref="REQ-001">
+            <span class="orb orb-a" aria-hidden="true"></span>
+            <span class="orb orb-b" aria-hidden="true"></span>
+            <span class="orb orb-c" aria-hidden="true"></span>
+            <div class="hero-card">
+              <div class="row">
+                <span class="label">Reporting period</span>
+                <span class="pill pill-brand">Quarter 2</span>
+              </div>
+              <div class="row" style="margin-top:6px">
+                <span class="amount" style="font-size:19px">1 Oct &ndash; 31 Dec 2026</span>
+              </div>
+              <div class="bar" aria-hidden="true"></div>
+              <div class="row" style="margin-top:10px">
+                <span class="label">Due date</span>
+                <span style="font-size:14px;font-weight:700">28 February 2027</span>
+              </div>
+            </div>
+          </div>
+
+          <ul class="value-list" data-ref="REQ-001">
+            <li><span class="tick" aria-hidden="true">&check;</span> Your figures are checked as you enter them</li>
+            <li><span class="tick" aria-hidden="true">&check;</span> You see the net amount before you lodge</li>
+            <li><span class="tick" aria-hidden="true">&check;</span> Your receipt number is issued straight away</li>
+          </ul>
+
+          <div class="frame-actions">
+            <button type="button" class="btn btn-primary" id="btnStart" data-ref="REQ-002">Start your statement</button>
+            <p class="meta" data-ref="BR-09">Nothing you enter is sent, stored or lodged. This is a prototype for sign&#8209;off only.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================== screen 2 : entity -->
+      <section class="screen" id="scr-entity" data-screen="2" data-title="Your business" data-step="1" hidden
+               data-req="REQ-002, REQ-003, REQ-007, BR-01, BR-02, BR-03, NFR-01, NFR-02, NFR-03, NFR-04">
+        <div class="frame-body">
+
+          <nav class="frame-nav" data-ref="REQ-002" aria-label="Statement progress">
+            <button type="button" class="nav-back" data-back="intro" aria-label="Back to the introduction">&#8592;</button>
+            <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="1"
+                 aria-valuetext="Step 1 of 5"><span style="width:20%"></span></div>
+            <span class="step-count">Step 1 of 5</span>
+          </nav>
+
+          <p class="eyebrow">Step 1 &mdash; your business</p>
+          <h1 class="h2" tabindex="-1">Who is lodging this statement?</h1>
+
+          <div class="callout callout-danger" id="sum-entity" role="alert" hidden>
+            <span class="callout-title">&#9888; Check these answers</span>
+            <span class="sum-text"></span>
+          </div>
+
+          <div class="scroll-wrap">
+            <div class="field-stack" data-scroll>
+
+              <div class="field" id="f-abn" data-ref="REQ-003, BR-01">
+                <label for="abn">Australian business number</label>
+                <input type="text" id="abn" name="abn" inputmode="numeric" autocomplete="off"
+                       placeholder="74 591 200 760" aria-describedby="hint-abn">
+                <p class="hint" id="hint-abn">Eleven digits. Spaces are ignored. Try <b>74 591 200 760</b>.</p>
+                <p class="field-error" id="err-abn" hidden></p>
+              </div>
+
+              <div class="field" id="f-contact" data-ref="REQ-003, BR-02">
+                <label for="contact">Authorised contact name</label>
+                <input type="text" id="contact" name="contact" autocomplete="off"
+                       placeholder="The person making the declaration" aria-describedby="hint-contact">
+                <p class="hint" id="hint-contact">The person who will make the declaration.</p>
+                <p class="field-error" id="err-contact" hidden></p>
+              </div>
+
+              <div class="field" id="f-email" data-ref="REQ-003, BR-03">
+                <label for="email">Contact email</label>
+                <input type="text" id="email" name="email" inputmode="email" autocomplete="off"
+                       placeholder="name@business.com.au" aria-describedby="hint-email">
+                <p class="hint" id="hint-email">Where the receipt would be sent.</p>
+                <p class="field-error" id="err-email" hidden></p>
+              </div>
+
+            </div>
+            <p class="scroll-note" hidden><span aria-hidden="true">&#8597;</span> <span class="scroll-note-text"></span></p>
+          </div>
+
+          <div class="frame-actions">
+            <button type="button" class="btn btn-primary" data-next="entity">Continue</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================== screen 3 : GST -->
+      <section class="screen" id="scr-gst" data-screen="3" data-title="GST labels" data-step="2" hidden
+               data-req="REQ-002, REQ-004, REQ-007, BR-04, BR-05, NFR-01, NFR-02, NFR-03, NFR-04">
+        <div class="frame-body">
+
+          <nav class="frame-nav" data-ref="REQ-002" aria-label="Statement progress">
+            <button type="button" class="nav-back" data-back="entity" aria-label="Back to step 1, your business">&#8592;</button>
+            <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="2"
+                 aria-valuetext="Step 2 of 5"><span style="width:40%"></span></div>
+            <span class="step-count">Step 2 of 5</span>
+          </nav>
+
+          <p class="eyebrow">Step 2 &mdash; goods and services tax</p>
+          <h1 class="h2" tabindex="-1">Your GST for the quarter</h1>
+          <p class="meta">Whole dollars only. Enter <b>0</b> where a label does not apply.</p>
+
+          <div class="callout callout-danger" id="sum-gst" role="alert" hidden>
+            <span class="callout-title">&#9888; Check these answers</span>
+            <span class="sum-text"></span>
+          </div>
+
+          <div class="scroll-wrap">
+            <div class="field-stack" data-scroll>
+
+              <div class="label-field" id="f-g1" data-ref="REQ-004, BR-04">
+                <label class="label-name" for="g1"><span class="label-code">G1</span>Total sales including GST</label>
+                <span class="money"><input type="text" id="g1" name="g1" inputmode="numeric" autocomplete="off" aria-label="G1 total sales including GST"></span>
+                <p class="field-error" id="err-g1" hidden></p>
+              </div>
+
+              <div class="label-field" id="f-a1" data-ref="REQ-004, BR-04, BR-05">
+                <label class="label-name" for="a1"><span class="label-code">1A</span>GST on sales</label>
+                <span class="money"><input type="text" id="a1" name="a1" inputmode="numeric" autocomplete="off" aria-label="1A GST on sales"></span>
+                <p class="field-error" id="err-a1" hidden></p>
+              </div>
+
+              <div class="label-field" id="f-b1" data-ref="REQ-004, BR-04">
+                <label class="label-name" for="b1"><span class="label-code">1B</span>GST on purchases</label>
+                <span class="money"><input type="text" id="b1" name="b1" inputmode="numeric" autocomplete="off" aria-label="1B GST on purchases"></span>
+                <p class="field-error" id="err-b1" hidden></p>
+              </div>
+
+              <p class="callout" data-ref="BR-05"><b>1A</b> cannot be more than <b>G1</b>. We check that before you continue.</p>
+
+            </div>
+            <p class="scroll-note" hidden><span aria-hidden="true">&#8597;</span> <span class="scroll-note-text"></span></p>
+          </div>
+
+          <div class="frame-actions">
+            <button type="button" class="btn btn-primary" data-next="gst">Continue</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================== screen 4 : PAYG -->
+      <section class="screen" id="scr-payg" data-screen="4" data-title="PAYG labels" data-step="3" hidden
+               data-req="REQ-002, REQ-005, REQ-007, BR-04, BR-06, NFR-01, NFR-02, NFR-03, NFR-04">
+        <div class="frame-body">
+
+          <nav class="frame-nav" data-ref="REQ-002" aria-label="Statement progress">
+            <button type="button" class="nav-back" data-back="gst" aria-label="Back to step 2, GST labels">&#8592;</button>
+            <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="3"
+                 aria-valuetext="Step 3 of 5"><span style="width:60%"></span></div>
+            <span class="step-count">Step 3 of 5</span>
+          </nav>
+
+          <p class="eyebrow">Step 3 &mdash; pay as you go</p>
+          <h1 class="h2" tabindex="-1">Your PAYG for the quarter</h1>
+          <p class="meta">Whole dollars only. Enter <b>0</b> where a label does not apply.</p>
+
+          <div class="callout callout-danger" id="sum-payg" role="alert" hidden>
+            <span class="callout-title">&#9888; Check these answers</span>
+            <span class="sum-text"></span>
+          </div>
+
+          <div class="scroll-wrap">
+            <div class="field-stack" data-scroll>
+
+              <div class="label-field" id="f-w1" data-ref="REQ-005, BR-04">
+                <label class="label-name" for="w1"><span class="label-code">W1</span>Total salary, wages and other payments</label>
+                <span class="money"><input type="text" id="w1" name="w1" inputmode="numeric" autocomplete="off" aria-label="W1 total salary, wages and other payments"></span>
+                <p class="field-error" id="err-w1" hidden></p>
+              </div>
+
+              <div class="label-field" id="f-w2" data-ref="REQ-005, BR-04, BR-06">
+                <label class="label-name" for="w2"><span class="label-code">W2</span>Amounts withheld from those payments</label>
+                <span class="money"><input type="text" id="w2" name="w2" inputmode="numeric" autocomplete="off" aria-label="W2 amounts withheld from those payments"></span>
+                <p class="field-error" id="err-w2" hidden></p>
+              </div>
+
+              <div class="label-field" id="f-t7" data-ref="REQ-005, BR-04">
+                <label class="label-name" for="t7"><span class="label-code">T7</span>PAYG instalment for the quarter</label>
+                <span class="money"><input type="text" id="t7" name="t7" inputmode="numeric" autocomplete="off" aria-label="T7 PAYG instalment for the quarter"></span>
+                <p class="field-error" id="err-t7" hidden></p>
+              </div>
+
+              <p class="callout" data-ref="BR-06"><b>W2</b> cannot be more than <b>W1</b>. We check that before you continue.</p>
+
+            </div>
+            <p class="scroll-note" hidden><span aria-hidden="true">&#8597;</span> <span class="scroll-note-text"></span></p>
+          </div>
+
+          <div class="frame-actions">
+            <button type="button" class="btn btn-primary" data-next="payg">Continue</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== screen 5 : net amount -->
+      <section class="screen" id="scr-net" data-screen="5" data-title="Net amount" data-step="4" hidden
+               data-req="REQ-002, REQ-006, BR-07, NFR-01, NFR-04">
+        <div class="frame-body">
+
+          <nav class="frame-nav" data-ref="REQ-002" aria-label="Statement progress">
+            <button type="button" class="nav-back" data-back="payg" aria-label="Back to step 3, PAYG labels">&#8592;</button>
+            <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="4"
+                 aria-valuetext="Step 4 of 5"><span style="width:80%"></span></div>
+            <span class="step-count">Step 4 of 5</span>
+          </nav>
+
+          <p class="eyebrow">Step 4 &mdash; your net amount</p>
+          <h1 class="h2" tabindex="-1" id="netHeading">Here is your net amount</h1>
+          <p class="meta" id="netPlain">This is worked out from the labels you entered.</p>
+
+          <div class="scroll-wrap">
+            <div class="field-stack" data-scroll>
+
+              <div class="calc ref-in" data-ref="REQ-006, BR-07" style="margin-top:0">
+                <div class="calc-head">How this was worked out</div>
+                <p class="calc-working" id="netWorking"></p>
+                <div class="calc-out" id="netOut">
+                  <span class="who" id="netWho"></span>
+                  <span class="amount" id="netAmount"></span>
+                </div>
+              </div>
+
+              <div class="summary ref-in" data-ref="REQ-006" style="margin-top:0">
+                <div class="summary-head">Figures used</div>
+                <dl id="netFigures"></dl>
+              </div>
+
+              <p class="callout" data-ref="REQ-006"><span class="callout-title">Before you lodge</span>
+                You are seeing this <b>before</b> the statement is lodged, so you can go back and fix a figure now.</p>
+
+            </div>
+            <p class="scroll-note" hidden><span aria-hidden="true">&#8597;</span> <span class="scroll-note-text"></span></p>
+          </div>
+
+          <div class="frame-actions">
+            <button type="button" class="btn btn-primary" data-next="net">Review your statement</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================== screen 6 : review -->
+      <section class="screen" id="scr-review" data-screen="6" data-title="Review and declare" data-step="5" hidden
+               data-req="REQ-002, REQ-006, REQ-007, REQ-008, BR-07, BR-08, BR-09, NFR-01, NFR-02, NFR-03, NFR-04">
+        <div class="frame-body">
+
+          <nav class="frame-nav" data-ref="REQ-002" aria-label="Statement progress">
+            <button type="button" class="nav-back" data-back="net" aria-label="Back to step 4, net amount">&#8592;</button>
+            <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="5"
+                 aria-valuetext="Step 5 of 5"><span style="width:100%"></span></div>
+            <span class="step-count">Step 5 of 5</span>
+          </nav>
+
+          <p class="eyebrow">Step 5 &mdash; review and declare</p>
+          <h1 class="h2" tabindex="-1">Check your statement</h1>
+
+          <div class="callout callout-danger" id="sum-review" role="alert" hidden>
+            <span class="callout-title">&#9888; Check this before lodging</span>
+            <span class="sum-text"></span>
+          </div>
+
+          <div class="scroll-wrap">
+            <div class="field-stack" data-scroll>
+
+              <div data-ref="REQ-003, REQ-008">
+                <div class="summary" style="margin-top:0">
+                  <div class="summary-head sum-head-row">
+                    <span>Your business</span>
+                    <button type="button" class="sum-edit" data-goto="entity">Edit<span class="sr-only"> your business details</span></button>
+                  </div>
+                  <dl id="revEntity"></dl>
+                </div>
+              </div>
+
+              <div data-ref="REQ-004, REQ-008">
+                <div class="summary" style="margin-top:0">
+                  <div class="summary-head sum-head-row">
+                    <span>GST labels</span>
+                    <button type="button" class="sum-edit" data-goto="gst">Edit<span class="sr-only"> your GST labels</span></button>
+                  </div>
+                  <dl id="revGst"></dl>
+                </div>
+              </div>
+
+              <div data-ref="REQ-005, REQ-008">
+                <div class="summary" style="margin-top:0">
+                  <div class="summary-head sum-head-row">
+                    <span>PAYG labels</span>
+                    <button type="button" class="sum-edit" data-goto="payg">Edit<span class="sr-only"> your PAYG labels</span></button>
+                  </div>
+                  <dl id="revPayg"></dl>
+                </div>
+              </div>
+
+              <div class="calc ref-in" data-ref="REQ-006, REQ-008, BR-07" style="margin-top:0">
+                <div class="calc-head">Net amount for the quarter</div>
+                <p class="calc-working" id="revWorking"></p>
+                <div class="calc-out" id="revOut">
+                  <span class="who" id="revWho"></span>
+                  <span class="amount" id="revAmount"></span>
+                </div>
+              </div>
+
+              <div data-ref="REQ-008, BR-08">
+                <label class="consent" for="declare">
+                  <input type="checkbox" id="declare" name="declare" aria-describedby="err-declare">
+                  <span>I declare that the information given on this activity statement is true and correct,
+                        and that I am authorised to make this declaration.</span>
+                </label>
+                <p class="field-error" id="err-declare" style="margin-top:8px" hidden></p>
+              </div>
+
+              <p class="callout callout-warn" data-ref="BR-09"><span class="callout-title">Prototype</span>
+                Selecting <b>Lodge statement</b> does not lodge anything. No statement data is transmitted, stored or lodged.</p>
+
+            </div>
+            <p class="scroll-note" hidden><span aria-hidden="true">&#8597;</span> <span class="scroll-note-text"></span></p>
+          </div>
+
+          <div class="frame-actions">
+            <button type="button" class="btn btn-primary" data-next="review">Lodge statement</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================ screen 7 : confirmation -->
+      <section class="screen" id="scr-done" data-screen="7" data-title="Confirmation" hidden
+               data-req="REQ-008, BR-09, NFR-01, NFR-04">
+        <div class="frame-body">
+
+          <div class="scroll-wrap">
+            <div class="field-stack done-scroll" data-scroll style="margin-top:0">
+              <div class="done-body">
+                <div class="seal" aria-hidden="true">&check;</div>
+                <p class="eyebrow" style="margin-bottom:4px">Quarter 2 &middot; 1 Oct &ndash; 31 Dec 2026</p>
+                <h1 class="display" tabindex="-1">Statement lodged</h1>
+                <p class="lede" id="doneLede">Your activity statement has been received.</p>
+
+                <div class="receipt-chip" data-ref="REQ-008">
+                  <div class="label">Receipt number</div>
+                  <div class="value" id="receiptNo">&mdash;</div>
+                </div>
+
+                <div class="summary ref-in" data-ref="REQ-008" style="width:100%">
+                  <div class="summary-head">Lodgment record</div>
+                  <dl>
+                    <div class="item"><dt>Date of lodgment</dt><dd class="num" id="doneDate">&mdash;</dd></div>
+                    <div class="item"><dt>Time of lodgment</dt><dd class="num" id="doneTime">&mdash;</dd></div>
+                    <div class="item"><dt>Net amount</dt><dd class="num" id="doneNet">&mdash;</dd></div>
+                    <div class="item"><dt>Receipt sent to</dt><dd id="doneEmail">&mdash;</dd></div>
+                  </dl>
+                </div>
+
+                <p class="callout callout-warn" data-ref="BR-09" style="text-align:left">
+                  <span class="callout-title">Nothing was lodged</span>
+                  This is a sign&#8209;off prototype. No statement data was transmitted, stored or lodged, and
+                  no email was sent.</p>
+              </div>
+            </div>
+            <p class="scroll-note" hidden><span aria-hidden="true">&#8597;</span> <span class="scroll-note-text"></span></p>
+          </div>
+
+          <div class="frame-actions">
+            <button type="button" class="btn btn-ghost" id="btnRestart">Start a new statement</button>
+          </div>
+        </div>
+      </section>
+
+      <div class="home-indicator" aria-hidden="true"></div>
+
+    </div><!-- /.frame -->
+  </div><!-- /.device -->
+
+  <!-- ============================================================ trace strip -->
+  <div class="trace" role="region" aria-label="Requirement trace">
+    <div class="trace-head">
+      <div>
+        <div class="trace-title">Requirement trace &middot; live from <code>data-req</code></div>
+        <div class="trace-screen"><span id="traceNum">1</span>/7 &mdash; <span id="traceName">Introduction</span></div>
+      </div>
+      <button type="button" class="trace-toggle" id="btnRefs" aria-pressed="false">
+        Show refs on screen
+      </button>
+    </div>
+    <div class="trace-chips" id="traceChips" aria-live="polite"></div>
+  </div>
+
+</div><!-- /.stage -->
+
+<script src="app.js" defer></script>
+</body>
+</html>

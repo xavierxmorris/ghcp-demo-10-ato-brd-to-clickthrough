@@ -5,7 +5,9 @@ package-lock.json
 # Scratch output from testing/smoke.mjs
 testing/shots/
 
-# Produced by .\go.ps1 -Live
+# Scratch output of .\go.ps1 -Live. The committed copy of one such run is
+# prototype-rebuild/, kept so the --target result is reproducible without a
+# 22-minute rebuild.
 prototype-live/
 
 # OS and editor noise

@@ -317,18 +317,29 @@ if ($Live) {
     $livePrompt = 'Read the business requirements document at ' +
                   'brd/ato-bas-lodgment-brd.html. Build a working click-through ' +
                   'prototype in a new folder called prototype-live that satisfies ' +
-                  'every requirement REQ-001 to REQ-008 and every business rule ' +
-                  'BR-01 to BR-09. It must run straight from the filesystem with ' +
-                  'no server, framework, library, build step or CDN. Use the ' +
-                  'existing design system at assets/screens.css unmodified. ' +
-                  'Present the journey inside a 390x844 phone frame. On every ' +
-                  'screen section add a data-req attribute listing the ' +
-                  'requirements it satisfies, and show a trace strip under the ' +
-                  'phone that reads it live. Do not modify any file or folder ' +
-                  'outside prototype-live, and do not touch prototype or prototype-v2. ' +
-                  'Remove any scratch folders you ' +
-                  'create. Verify your work in a real browser before you finish. ' +
-                  'Stop once the journey works end to end and nothing is clipped.'
+                  'every requirement REQ-001 to REQ-008, every business rule ' +
+                  'BR-01 to BR-09, and every non-functional requirement NFR-01 to ' +
+                  'NFR-04. It must run straight from the filesystem by ' +
+                  'double-clicking index.html, with no server, framework, library, ' +
+                  'build step or CDN. Use the existing design system at ' +
+                  'assets/screens.css exactly as it is - link to it, reuse its ' +
+                  'classes and CSS variables, and do not modify that file. ' +
+                  'Present the journey inside a 390x844 phone frame centred on ' +
+                  'the page. Every refusal message must name the business rule ' +
+                  'that refused it. On every screen section add a data-req ' +
+                  'attribute listing the requirement references that screen ' +
+                  'satisfies, and show a trace strip under the phone that reads ' +
+                  'the current screen data-req live, plus a toggle that labels ' +
+                  'those references on the screen itself. Do not modify any file ' +
+                  'or folder outside prototype-live - in particular do not touch ' +
+                  'prototype, prototype-v2 or testing - and remove any scratch ' +
+                  'folders you create. Verify your work in a real browser before ' +
+                  'you finish: walk the whole journey, check every requirement and ' +
+                  'rule, and confirm nothing is clipped or unreachable at 390x844. ' +
+                  'Stop once the journey works end to end and nothing is clipped - ' +
+                  'do not keep polishing. Finish by listing which requirement each ' +
+                  'screen satisfies, and anything you had to decide that the ' +
+                  'document did not specify.'
 
     Write-Host '  copilot -p "<the prompt below>" --allow-all-tools' -ForegroundColor Yellow
     Write-Host ''

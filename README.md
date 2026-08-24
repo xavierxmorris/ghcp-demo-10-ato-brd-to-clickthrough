@@ -117,6 +117,51 @@ corrected **us**, not the code.
 
 ---
 
+## The rebuild — the most useful number in the repo
+
+Everything above is 102 of 102 green. This is not.
+
+`.\go.ps1 -Live` rebuilt the entire prototype from BRD v1.0 in one unattended
+Copilot run — **22 minutes 7 seconds**, three files, no hand-written code. The
+full transcript is in
+[`iteration/copilot-run-live-oneshot.log`](./iteration/copilot-run-live-oneshot.log).
+It wrote and ran its own suite (204 checks, all passing) and fixed a real
+grid-squash defect it found on the way.
+
+Then the **committed** suite was pointed at it:
+
+```powershell
+node testing\verify.mjs v1.0 --target=prototype-live   # 27 / 43
+```
+
+**Sixteen failures, and not one of them was a defect in the build.** An
+independent walk confirmed the net amount is $14,500 — matching a hand
+calculation of BR-07 — with all 7 screens traced, the frame at exactly
+390 × 844, zero network requests and zero console errors.
+
+| What actually failed | Count |
+|---|---|
+| One journey-shape decision the BRD never specified — it gave the net amount its **own screen**, making the journey 5 steps rather than 4 — and everything downstream of my `driveTo()` helper | ~9 |
+| Assertions written against *my* wording, not the document's meaning (`/owe the ATO/` vs *"Payable to the ATO — 7A"*) | 3 |
+| One assertion that was simply badly written — TC-042 refuses a nil message that mentions `7A`; the build's *"Nil result — neither 7A nor 7B is reported"* is better copy and fails it | 1 |
+| Selectors I never wrote into the published contract, including the refs toggle, which it built as a `<button aria-pressed>` instead of a checkbox | 3 |
+
+Two things follow, and they are the honest ones:
+
+- **Test the journey, not the prose.** `netAmount === 14500` survives a rebuild.
+  `/owe the ATO/` tests my English.
+- **A red suite is not a broken build.** Sixteen red lines, zero defects. A test
+  lead who reports "27/43, it's broken" without reading the failures has done
+  real damage.
+
+And one caveat that matters: the run read `prototype-v2/index.html` early on, and
+34 of its 72 element ids match mine. **This was not a clean room** — some of the
+selector contract held because the prior implementation was visible, not purely
+because the prompt asked for it. Full analysis in
+[`TESTER-PLAYBOOK.md`](./TESTER-PLAYBOOK.md), UC-8.
+
+---
+
 ## Why it lands
 
 - **The input is theirs.** A BRD is an artefact business analysts own and defend.
@@ -152,6 +197,7 @@ corrected **us**, not the code.
 | `.\go.ps1 -Manual` | **Presenting live.** Enter advances each beat, so questions can't run down the clock. |
 | `.\go.ps1 -Check` | Pre-flight before you walk on stage. Exits 0/1, CI-safe, prints the measured facts — or **STALE** if anything changed since the last run. |
 | `.\go.ps1 -Verify` | Re-run every check for real. Needs Node and Edge. |
+| `node testing\verify.mjs v1.0 --target=<folder>` | Point the committed suite at a different build of the same document. Never writes results. |
 | `.\go.ps1 -NoBrowser` | Rehearsing the words without opening windows. |
 | `.\go.ps1 -Live` | Workshop mode — Copilot really rebuilds the app from the BRD into `prototype-live\`. Budget 20–30 minutes. **Commit first:** the only thing keeping it out of `prototype\` is an instruction in the prompt, not a sandbox. |
 
@@ -209,6 +255,9 @@ And for a tester:
 │   └── screens.css                 the Lodge Assist design system, reused unmodified
 ├── prototype/                      built from BRD v1.0  - 6 screens
 ├── prototype-v2/                   built from BRD v1.1  - 7 screens, one conditional
+├── prototype-rebuild/              an INDEPENDENT rebuild from BRD v1.0, produced by
+│                                   one unattended .\go.ps1 -Live run. Scores 27/43
+│                                   against the committed suite - see the README
 ├── testing/
 │   ├── verify.mjs                  102 checks, real browser, exits 0/1
 │   ├── smoke.mjs                   a visual walk that screenshots every screen
@@ -219,7 +268,8 @@ And for a tester:
 │       ├── test-data.html          synthetic data + the selector contract
 │       ├── results.js / .json      written by verify.mjs - do not edit
 │       └── pack.css                shared presentation
-└── iteration/                      the raw output of the verification run
+└── iteration/                      raw output of the verification run, and the full
+                                    transcript of the -Live rebuild
 ```
 
 **One source of truth, with one deliberate exception.** The pack, the matrix and

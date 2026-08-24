@@ -165,9 +165,10 @@ belongs in the prompt.
 across both versions, driving Microsoft Edge. Run it:
 
 ```powershell
-node testing\verify.mjs          # both versions
-node testing\verify.mjs v1.1     # one
-node testing\verify.mjs --headed # watch it
+node testing\verify.mjs                            # both versions
+node testing\verify.mjs v1.1                       # one
+node testing\verify.mjs --headed                   # watch it
+node testing\verify.mjs v1.0 --target=prototype-live  # point it at another build
 ```
 
 It writes `testing/test-pack/results.js` and `results.json`, which the acceptance
@@ -243,16 +244,82 @@ SC 1.4.11 requires — through 93 passing checks — because nothing measured it
 The honest warning in most of these demos is that generated markup is not stable
 between runs, so tests written against one build will not survive the next.
 
-This repo takes the other route: **the selectors are a documented contract.** The
-table at the bottom of [`test-data.html`](./testing/test-pack/test-data.html) lists
-every identifier the suite depends on. Put that table in the prompt and the next
-build has to honour it:
+This repo tried the other route — **a documented selector contract**, in the
+table at the bottom of [`test-data.html`](./testing/test-pack/test-data.html) —
+and then tested the claim by rebuilding the whole prototype from BRD v1.0 in a
+single unattended run and pointing the committed suite at the output:
+
+```powershell
+.\go.ps1 -Live                                    # 22 min 07 s, 3 files
+node testing\verify.mjs v1.0 --target=prototype-live
+```
+
+### The result: 27 of 43
+
+Not the number this section was originally written to expect. It is a much more
+useful one.
+
+**The generated build was not the problem.** It wrote and ran its own suite —
+204 checks, all passing — and an independent walk of its journey confirmed the
+things that actually matter: the net amount is **$14,500**, matching a hand
+calculation of BR-07; all 7 screens carry a `data-req`; the frame is exactly
+390 × 844; zero network requests; zero console errors; the review screen replays
+the name that was typed. It linked `assets/screens.css` unmodified and touched
+nothing outside its own folder.
+
+**Every one of the 16 failures was mine.** Sorted by cause:
+
+| Cause | Count | Example |
+|---|---|---|
+| **One journey-shape decision, cascading** | ~9 | It gave the net amount its **own screen** (`scr-net`), so the journey is 5 steps, not 4. My `driveTo()` helper walked PAYG → review, landed on `scr-net` instead, and everything downstream timed out. The BRD never specified screen boundaries — this is a legitimate design decision, not a defect. |
+| **Assertions written against my own wording** | 3 | TC-040 expected `/owe the ATO/`; the build says *"Payable to the ATO — 7A"*. Same behaviour, different English. |
+| **An assertion that was simply badly written** | 1 | TC-042 asserted a nil result must not mention `7A` or `7B`. The build's message is *"Nil result — neither 7A nor 7B is reported"*, which is **better** copy and fails my check. |
+| **Selectors I never put in the contract** | 3 | `#refsToggle` (it built a `<button aria-pressed>` instead of a checkbox), the per-label field wrapper ids, and the `.lbl` span inside a label. All are things my contract table did not list. |
+
+### What this actually teaches
+
+1. **A selector contract works, but only for what is in it.** Every identifier the
+   contract *did* list — `#abn`, `#g1`, `#a1`, `#b1`, `#w1`, `#w2`, `#t7`,
+   `#declare`, `#btnStart`, `.screen`, `scr-*`, `[data-req]`, `.field-error` —
+   survived the rebuild. Everything that failed was outside it. **Publish the
+   whole contract or none of it.**
+2. **Be honest about why it held.** The run read `prototype-v2/index.html` early
+   for markup idioms, and 34 of its 72 element ids match mine. This was not a
+   clean room. Some of that contract held because the prior implementation was
+   visible, not purely because the prompt asked for it. If you want the strong
+   claim, run it in a folder with the BRD and the design system and **nothing
+   else** — see the caveats below.
+3. **Test the journey, not the wording.** `/owe the ATO/` is a test of my prose.
+   `netAmount === 14500` is a test of BR-07. Only one of those survives a
+   rebuild, and only one of them is what the document actually says.
+4. **A failing suite is not the same as a broken build**, and a test lead who
+   reports "27/43, the build is broken" without reading the failures has done
+   real damage. Sixteen red lines, zero defects.
+
+> **This is the section to show a sceptical audience.** Everything else in this
+> repo is 102 of 102 green. This one is 27 of 43, and it is the only part that
+> tells you something you did not already believe.
+
+### Doing it yourself
+
+```powershell
+.\go.ps1 -Live                                     # rebuild from the BRD
+node testing\verify.mjs v1.0 --target=prototype-live
+```
+
+`--target=` never writes results — the committed baseline in `results.json` is
+left alone, so you can point the suite at anything without corrupting the
+evidence.
+
+And put the contract in the prompt, not just in a file:
 
 > *"Rebuild the prototype from the BRD. Honour the selector contract in
-> `testing/test-pack/test-data.html` exactly — the automated suite in
-> `testing/verify.mjs` must pass against your output without modification."*
+> `testing/test-pack/test-data.html` exactly — the suite in `testing/verify.mjs`
+> must pass against your output without modification."*
 
-That turns *"the tests broke again"* into a build failure with a name.
+That turns *"the tests broke again"* into a build failure with a name. Just be
+aware, from the numbers above, that the part of the contract you forgot to write
+down is the part that will break.
 
 ---
 
