@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test data — BRD-2026-118 Lodge Assist</title>
+<link rel="stylesheet" href="pack.css">
+</head>
+<body>
+<main class="sheet">
+
+  <div class="protective">
+    <span class="marking">OFFICIAL &mdash; DEMONSTRATION</span>
+    <span class="demo">Illustrative demonstration artefact — not an ATO publication</span>
+  </div>
+
+  <header class="masthead">
+    <div class="kind">Test data</div>
+    <h1 id="title">&mdash;</h1>
+    <p>Synthetic values for the cases in the pack. Nothing here identifies a real entity or a real taxpayer.</p>
+  </header>
+
+  <nav class="pack-nav">
+    <a href="acceptance-pack.html">Test pack</a>
+    <a href="traceability.html">Traceability</a>
+    <a href="test-data.html" aria-current="page">Test data</a>
+    <a href="../../brd/ato-bas-lodgment-brd.html">BRD v1.0</a>
+    <a href="../../brd/ato-bas-lodgment-brd-v1.1.html">BRD v1.1</a>
+  </nav>
+
+  <div class="runbar stale" style="border-left-color:#8a5300">
+    <b>Synthetic data only.</b> The ABNs below were generated to pass or fail the
+    published check-digit algorithm so that BR-01 can be tested at its boundary.
+    They are not looked up against the Australian Business Register and must not
+    be treated as identifying any entity. No real taxpayer data appears anywhere
+    in this repository.
+  </div>
+
+  <div id="tables"></div>
+
+  <h2 class="sec">Stable selectors</h2>
+  <p style="margin:0 0 8px;color:#3a5468">
+    Automation is only cheap if it survives the next change. These identifiers
+    are part of the prototype&rsquo;s contract with its tests &mdash; change one
+    and you change the test pack with it.
+  </p>
+  <table>
+    <thead><tr><th class="id" style="width:180px">Selector</th><th style="width:96px">Version</th><th>What it is</th></tr></thead>
+    <tbody id="selectors"></tbody>
+  </table>
+
+  <p class="disclaimer">
+    <strong>Disclaimer.</strong> Written against a fictional business
+    requirements document created for a demonstration. Not affiliated with,
+    endorsed by, or representative of the Australian Taxation Office. The
+    thresholds tested here are invented. Nothing here is tax advice.
+  </p>
+
+  <footer class="pack-foot">
+    <span id="footLeft">&mdash;</span>
+    <span>Generated from <code>testing/test-pack/cases.js</code>.</span>
+  </footer>
+
+</main>
+
+<script src="cases.js"></script>
+<script>
+(function () {
+  'use strict';
+  var P = window.ATO_TEST_PACK;
+  document.getElementById('title').textContent = P.document + ' \u2014 ' + P.title;
+  document.getElementById('footLeft').textContent = P.document + ' \u00b7 test data';
+
+  function el(t, c, x) { var n = document.createElement(t); if (c) n.className = c; if (x != null) n.textContent = x; return n; }
+
+  var TITLES = {
+    abn: 'ABN values (BR-01)',
+    money: 'Monetary label values (BR-04, BR-10)',
+    calculation: 'Net amount cases (BR-07)',
+    variation: 'Instalment variation boundary (BR-11)'
+  };
+
+  var host = document.getElementById('tables');
+  Object.keys(P.data).forEach(function (key) {
+    var set = P.data[key];
+    host.appendChild(el('h2', 'sec', TITLES[key] || key));
+    var p = el('p', null, set.caption);
+    p.style.cssText = 'margin:0 0 8px;color:#3a5468';
+    host.appendChild(p);
+
+    var table = el('table');
+    var thead = el('thead');
+    var htr = el('tr');
+    set.columns.forEach(function (c, i) {
+      var th = el('th', i === 0 ? 'id' : null, c);
+      if (i === 0) th.style.width = '160px';
+      htr.appendChild(th);
+    });
+    thead.appendChild(htr);
+    table.appendChild(thead);
+
+    var tbody = el('tbody');
+    set.rows.forEach(function (row) {
+      var tr = el('tr');
+      row.forEach(function (cell, i) {
+        var td = el('td', i === 0 ? 'id' : null);
+        if (i === 0 && cell === '') { td.appendChild(el('span', 'na', '(empty)')); }
+        else if (/^accept$/.test(cell)) { td.appendChild(el('span', 'status s-pass', cell)); }
+        else if (/^refuse$/.test(cell)) { td.appendChild(el('span', 'status s-fail', cell)); }
+        /* The warning column is expected behaviour, not a failure - a red pill
+           on the row the document REQUIRES to warn reads as a defect. */
+        else if (/^(yes|no)$/.test(cell)) { td.appendChild(el('span', 'tag ' + (cell === 'yes' ? 't-boundary' : 't-positive'), cell === 'yes' ? 'warns' : 'silent')); }
+        else { td.textContent = cell; }
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    host.appendChild(table);
+  });
+
+  var SELECTORS = [
+    ['#abn / #contact / #email', 'both', 'Entity capture fields (REQ-003)'],
+    ['#g1 / #a1 / #b1', 'both', 'GST labels G1, 1A, 1B (REQ-004)'],
+    ['#w1 / #w2 / #t7', 'both', 'PAYG labels W1, W2, T7 (REQ-005)'],
+    ['#t8 / #t9 / #t4', 'v1.1', 'Variation labels T8, T9 and the reason code (REQ-009)'],
+    ['#varyYes / #varyNo', 'v1.1', 'The variation choice on the PAYG screen (REQ-009)'],
+    ['#gicWarning / #gicAck', 'v1.1', 'Interest charge warning and its acknowledgement (BR-11)'],
+    ['#declare / #btnLodge', 'both', 'Declaration and the lodge action (BR-08)'],
+    ['#scr-<name> [data-next]', 'both', 'The continue action on a named screen'],
+    ['#scr-<name> [data-back]', 'both', 'The back action on a named screen (REQ-002)'],
+    ['.screen:not([hidden])', 'both', 'The screen currently on display'],
+    ['[data-req]', 'both', 'A screen\u2019s declared requirement references (acceptance criterion 2)'],
+    ['[data-ref]', 'both', 'An element\u2019s declared references, revealed by the on-screen toggle'],
+    ['.field-error', 'both', 'A refusal message. Its text always cites the rule applied (REQ-007)'],
+    ['#netAmount / #netWho / #netWorking', 'both', 'The calculated net, who it is owed to, and the arithmetic (REQ-006)'],
+    ['#receiptNo / #lodgedAt', 'both', 'Receipt number and lodgment timestamp (REQ-008)'],
+    ['window.LodgeAssist', 'both', 'A read-only surface for checks: version, screens, isValidAbn, parseMoney, netAmount, read, currentScreenId, fillDemo. It never bypasses a rule.']
+  ];
+  var sel = document.getElementById('selectors');
+  SELECTORS.forEach(function (row) {
+    var tr = el('tr');
+    var td0 = el('td', 'id');
+    td0.appendChild(el('code', null, row[0]));
+    tr.appendChild(td0);
+    tr.appendChild(el('td', null, row[1]));
+    tr.appendChild(el('td', null, row[2]));
+    sel.appendChild(tr);
+  });
+})();
+</script>
+</body>
+</html>

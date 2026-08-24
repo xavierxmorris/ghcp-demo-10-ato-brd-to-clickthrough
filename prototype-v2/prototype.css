@@ -1,0 +1,258 @@
+/* ============================================================================
+   Lodge Assist prototype — app layer
+   ----------------------------------------------------------------------------
+   Sits on top of ../assets/screens.css (the service design system, reused
+   unmodified). This file adds only what the design system does not cover: the
+   presentation stage around the phone, screen switching, the traceability strip
+   required by acceptance criterion 2, and the scroll container on review.
+
+   No framework, no build step, no CDN. Runs from file://.
+   ========================================================================= */
+
+html { background: #e7edf3; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 26px 16px 40px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background:
+    radial-gradient(1100px 620px at 50% -12%, #ffffff 0%, #e7edf3 58%, #dbe4ec 100%);
+  font-family: var(--font-ui);
+  color: var(--ink-900);
+  -webkit-font-smoothing: antialiased;
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 470px;
+}
+
+.stage-warning {
+  margin: 0;
+  padding: 9px 14px;
+  max-width: 430px;
+  border-radius: 10px;
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-edge);
+  color: var(--warn);
+  font-size: 12px;
+  line-height: 1.45;
+  text-align: center;
+}
+.stage-warning b { font-weight: 800; }
+
+/* ------------------------------------------------------- the phone frame -- */
+
+#frame {
+  flex: 0 0 auto;
+  border-radius: 42px;
+  border: 9px solid #0d1a24;
+  box-shadow:
+    0 0 0 2px #2c3d4b,
+    0 26px 60px rgba(16, 34, 47, .30),
+    0 6px 16px rgba(16, 34, 47, .18);
+}
+.official-bar:first-child { border-radius: 33px 33px 0 0; }
+
+/* --------------------------------------------------------- screen switch -- */
+
+.screen {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.screen[hidden] { display: none !important; }
+
+/* Review needs to scroll: there is genuinely more here than one phone height. */
+.scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-top: 10px;
+  padding-right: 3px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink-200) transparent;
+}
+.scroll::-webkit-scrollbar { width: 5px; }
+.scroll::-webkit-scrollbar-thumb { background: var(--ink-200); border-radius: 3px; }
+
+/* There is more below the fold on review. Say so, rather than hiding it. */
+.scroll-hint {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 6px 0 0;
+  text-align: center;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  color: var(--ink-400);
+}
+.scroll-hint[hidden] { display: none; }
+
+/* The activity-statement label sheet is a card, like the paper form it replaces.
+   Flex, not grid: a shrinking grid container squashes its auto rows, which
+   collapsed the running-total panel once three error messages appeared. */
+.label-sheet {
+  display: flex;
+  flex-direction: column;
+  flex: 0 1 auto;          /* sit at the top of the screen, don't stretch */
+  gap: 0;
+  padding: 2px 14px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+.label-sheet > * { flex: 0 0 auto; }
+.label-sheet .calc { margin: 10px -6px 12px; }
+
+/* Programmatic focus moves the screen reader, it should not draw a ring. */
+[tabindex="-1"]:focus { outline: none; }
+
+/* An invalid field swaps its hint for the error, so the fold doesn't move. */
+.field.is-invalid .hint { display: none; }
+
+/* Consent blocks carry their own error, so they need the invalid treatment too. */
+.is-invalid > .consent {
+  border-color: var(--danger);
+  border-width: 2px;
+  background: var(--danger-bg);
+}
+
+/* Long email addresses get their own line rather than breaking mid-word. */
+.summary .item.stack { flex-direction: column; align-items: flex-start; gap: 3px; }
+.summary .item.stack dd { text-align: left; font-size: 14px; overflow-wrap: break-word; }
+
+.hero-card .period {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -.4px;
+  white-space: nowrap;
+}
+.label-name em { font-style: normal; font-weight: 500; color: var(--ink-500); }
+
+/* ------------------------------------------------------- traceability ----- */
+
+.trace {
+  width: 100%;
+  max-width: 430px;
+  padding: 12px 16px 13px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+.trace-doc {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+  color: var(--ink-500);
+}
+.trace-doc b { color: var(--brand-600); }
+.trace-line {
+  margin: 7px 0 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-600);
+}
+.trace-line > b { color: var(--ink-900); font-weight: 800; }
+.trace-line .sep { margin: 0 5px; color: var(--ink-400); }
+#traceRefs { display: inline-flex; flex-wrap: wrap; gap: 5px; justify-content: center; vertical-align: middle; }
+#traceRefs b {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--brand-050);
+  border: 1px solid var(--brand-300);
+  color: var(--brand-600);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: .4px;
+  font-variant-numeric: tabular-nums;
+}
+#traceRefs b.br { background: var(--teal-050); border-color: var(--teal-500); color: var(--teal-600); }
+
+.trace-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 7px 14px;
+  min-height: 44px;
+  border-radius: 999px;
+  background: var(--surface-sunken);
+  border: 1px solid var(--hairline);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-600);
+  cursor: pointer;
+}
+.trace-toggle input { width: 18px; height: 18px; margin: 0; accent-color: var(--brand-500); }
+.trace-toggle:has(input:checked) {
+  background: var(--brand-050);
+  border-color: var(--brand-500);
+  color: var(--brand-600);
+}
+
+/* ---- on-screen reference labels -------------------------------------------
+   Deliberately drawn INSIDE the element's own box. The frame and the frame
+   body both clip their overflow, so anything hung outside the top edge would
+   be cut off on the first element of every screen. */
+
+.show-refs [data-ref] {
+  position: relative;
+  box-shadow: inset 0 0 0 1.5px rgba(11, 59, 92, .38);
+  border-radius: 8px;
+}
+.show-refs [data-ref]::after {
+  content: attr(data-ref);
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 8;
+  padding: 1px 6px 2px;
+  border-radius: 0 7px 0 7px;
+  background: var(--brand-600);
+  color: #fff;
+  font-family: var(--font-ui);
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: .5px;
+  line-height: 1.5;
+  white-space: nowrap;
+  pointer-events: none;
+  text-transform: none;
+}
+/* The money input sits hard against the top-right corner, so shift its tag
+   to the left edge where the label text has room. */
+.show-refs .label-field::after { right: auto; left: 0; border-radius: 0 7px 7px 0; }
+.show-refs .trace::after { background: var(--teal-600); }
+
+/* ------------------------------------------------------------- a11y ------- */
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 470px) {
+  body { padding: 14px 8px 28px; }
+  #frame { transform: scale(.92); transform-origin: top center; }
+}

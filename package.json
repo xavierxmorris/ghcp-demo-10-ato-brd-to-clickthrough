@@ -1,0 +1,17 @@
+{
+  "name": "ghcp-demo-10-ato-brd-to-clickthrough",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "An ATO-style BRD becomes a working click-through app and a traced test pack that runs itself. Illustrative demonstration - not an ATO service.",
+  "license": "MIT",
+  "scripts": {
+    "verify": "node testing/verify.mjs",
+    "verify:v1": "node testing/verify.mjs v1.0",
+    "verify:v2": "node testing/verify.mjs v1.1",
+    "smoke": "node testing/smoke.mjs prototype"
+  },
+  "dependencies": {
+    "playwright-core": "^1.57.0"
+  }
+}

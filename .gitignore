@@ -1,0 +1,14 @@
+# Verification tooling only - the demo itself needs none of this.
+node_modules/
+package-lock.json
+
+# Scratch output from testing/smoke.mjs
+testing/shots/
+
+# Produced by .\go.ps1 -Live
+prototype-live/
+
+# OS and editor noise
+Thumbs.db
+.DS_Store
+.vscode/

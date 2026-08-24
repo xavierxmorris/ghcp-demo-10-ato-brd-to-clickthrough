@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Traceability matrix — BRD-2026-118 Lodge Assist</title>
+<link rel="stylesheet" href="pack.css">
+</head>
+<body>
+<main class="sheet">
+
+  <div class="protective">
+    <span class="marking">OFFICIAL &mdash; DEMONSTRATION</span>
+    <span class="demo">Illustrative demonstration artefact — not an ATO publication</span>
+  </div>
+
+  <header class="masthead">
+    <div class="kind">Requirements traceability matrix</div>
+    <h1 id="title">&mdash;</h1>
+    <p id="sub">&mdash;</p>
+  </header>
+
+  <nav class="pack-nav">
+    <a href="acceptance-pack.html">Test pack</a>
+    <a href="traceability.html" aria-current="page">Traceability</a>
+    <a href="test-data.html">Test data</a>
+    <a href="../../brd/ato-bas-lodgment-brd.html">BRD v1.0</a>
+    <a href="../../brd/ato-bas-lodgment-brd-v1.1.html">BRD v1.1</a>
+  </nav>
+
+  <div class="controls">
+    <strong>Document version</strong>
+    <span id="versionButtons"></span>
+  </div>
+
+  <div id="verdict" class="runbar">&mdash;</div>
+
+  <div class="stats" id="stats"></div>
+
+  <h2 class="sec">Forward &mdash; every reference in the document, and what verifies it</h2>
+  <p style="margin:0 0 8px;color:#3a5468">
+    Section 8 of the BRD requires every requirement, non-functional requirement and
+    business rule to carry at least one test case. A row highlighted in red is untraced.
+  </p>
+  <table>
+    <thead>
+      <tr>
+        <th class="id" style="width:78px">Reference</th>
+        <th>What the document says</th>
+        <th style="width:74px">Cases</th>
+        <th style="width:250px">Traced to</th>
+        <th style="width:96px">Automated</th>
+      </tr>
+    </thead>
+    <tbody id="forward"></tbody>
+  </table>
+
+  <h2 class="sec">Backward &mdash; every case, and what it claims to verify</h2>
+  <p style="margin:0 0 8px;color:#3a5468">
+    A case that names no reference is a test nobody asked for. A reference not in
+    the document is a test written against something that was never agreed.
+  </p>
+  <table>
+    <thead>
+      <tr>
+        <th class="id" style="width:74px">Case</th>
+        <th style="width:96px">Type</th>
+        <th>Expected result</th>
+        <th style="width:210px">Verifies</th>
+      </tr>
+    </thead>
+    <tbody id="backward"></tbody>
+  </table>
+
+  <h2 class="sec">What changed between versions</h2>
+  <table>
+    <thead>
+      <tr>
+        <th class="id" style="width:78px">Reference</th>
+        <th style="width:104px">Change</th>
+        <th>Impact on the test pack</th>
+      </tr>
+    </thead>
+    <tbody id="delta"></tbody>
+  </table>
+
+  <p class="disclaimer">
+    <strong>Disclaimer.</strong> Written against a fictional business
+    requirements document created for a demonstration. Not affiliated with,
+    endorsed by, or representative of the Australian Taxation Office. Nothing
+    here is tax advice.
+  </p>
+
+  <footer class="pack-foot">
+    <span id="footLeft">&mdash;</span>
+    <span>Generated from <code>testing/test-pack/cases.js</code>.</span>
+  </footer>
+
+</main>
+
+<script src="cases.js"></script>
+<script src="results.js" onerror="window.__noResults=true"></script>
+<script>
+(function () {
+  'use strict';
+  var P = window.ATO_TEST_PACK;
+  var R = window.ATO_TEST_RESULTS || null;
+  var version = P.versions[P.versions.length - 1].id;
+
+  function el(t, c, x) { var n = document.createElement(t); if (c) n.className = c; if (x != null) n.textContent = x; return n; }
+  function chip(ref) { return el('span', 'ref' + (/^(BR|NFR)-/.test(ref) ? ' br' : ''), ref); }
+
+  function casesFor(version) {
+    return P.cases.filter(function (c) { return c.applies.indexOf(version) !== -1; });
+  }
+
+  /* A reference belongs to a version if it existed by then. */
+  function refsFor(version) {
+    var order = P.versions.map(function (v) { return v.id; });
+    var at = order.indexOf(version);
+    return P.references.filter(function (r) {
+      return order.indexOf(r.since) <= at;
+    });
+  }
+
+  function buildButtons(host, values, current, onPick) {
+    host.textContent = '';
+    values.forEach(function (v) {
+      var b = el('button', null, v);
+      b.setAttribute('aria-pressed', String(v === current));
+      b.addEventListener('click', function () { onPick(v); });
+      host.appendChild(b);
+    });
+  }
+
+  function statusOf(id) {
+    if (!R || !R.versions[version] || !R.versions[version][id]) return null;
+    return R.versions[version][id].status;
+  }
+
+  function render() {
+    var cases = casesFor(version);
+    var refs = refsFor(version);
+    var byRef = {};
+    refs.forEach(function (r) { byRef[r.ref] = []; });
+    var orphans = [];
+    cases.forEach(function (c) {
+      if (!c.refs.length) orphans.push(c.id);
+      c.refs.forEach(function (ref) {
+        if (!byRef[ref]) { byRef[ref] = []; orphans.push(c.id + ' \u2192 ' + ref); }
+        byRef[ref].push(c);
+      });
+    });
+
+    var gaps = refs.filter(function (r) { return byRef[r.ref].length === 0; });
+
+    buildButtons(document.getElementById('versionButtons'),
+      P.versions.map(function (v) { return v.id; }), version,
+      function (v) { version = v; render(); });
+
+    var spec = P.versions.filter(function (v) { return v.id === version; })[0];
+    document.getElementById('title').textContent = P.document + ' \u2014 ' + P.title;
+    document.getElementById('sub').textContent = spec.id + ' \u00b7 ' + spec.date + ' \u00b7 ' + spec.note;
+    document.getElementById('footLeft').textContent = P.document + ' ' + spec.id;
+
+    var verdict = document.getElementById('verdict');
+    if (gaps.length === 0 && orphans.length === 0) {
+      verdict.className = 'runbar';
+      verdict.innerHTML = '<b>Complete both ways.</b> Every one of the ' + refs.length +
+        ' references in ' + version + ' carries at least one case, and every case names a reference that exists in the document.';
+    } else {
+      verdict.className = 'runbar has-fail';
+      verdict.innerHTML = '<b>' + gaps.length + ' reference(s) with no case</b>' +
+        (orphans.length ? ' and <b>' + orphans.length + ' case(s) with no matching reference</b>' : '') + '.';
+    }
+
+    var stats = document.getElementById('stats');
+    stats.textContent = '';
+    [['References', refs.length],
+     ['Cases', cases.length],
+     ['Untraced', gaps.length],
+     ['Cases per reference', (cases.reduce(function (a, c) { return a + c.refs.length; }, 0) / refs.length).toFixed(1)]
+    ].forEach(function (s) {
+      var d = el('div', 'stat');
+      d.appendChild(el('div', 'n', String(s[1])));
+      d.appendChild(el('div', 'k', s[0]));
+      stats.appendChild(d);
+    });
+
+    var fwd = document.getElementById('forward');
+    fwd.textContent = '';
+    refs.forEach(function (r) {
+      var list = byRef[r.ref];
+      var tr = el('tr', list.length ? null : 'gap');
+      tr.appendChild(el('td', 'id', r.ref));
+
+      var tdWhat = el('td');
+      tdWhat.appendChild(el('div', null, r.title));
+      if (r.revisedIn === version && r.revision) {
+        tdWhat.appendChild(el('p', 'note', 'Revised in ' + version + ': ' + r.revision));
+      }
+      tr.appendChild(tdWhat);
+
+      tr.appendChild(el('td', 'cell ' + (list.length ? 'hit' : 'miss'), String(list.length)));
+
+      var tdCases = el('td');
+      if (!list.length) tdCases.appendChild(el('span', 'na', 'no case traces to this reference'));
+      list.forEach(function (c) { tdCases.appendChild(chip(c.id)); });
+      tr.appendChild(tdCases);
+
+      var auto = list.filter(function (c) { return c.auto; });
+      var passing = auto.filter(function (c) { return statusOf(c.id) === 'pass'; });
+      var td = el('td', 'status ' + (auto.length && passing.length === auto.length ? 's-pass'
+                : (auto.length ? 's-fail' : 's-manual')));
+      td.textContent = auto.length ? passing.length + ' / ' + auto.length : 'manual';
+      tr.appendChild(td);
+
+      fwd.appendChild(tr);
+    });
+
+    var back = document.getElementById('backward');
+    back.textContent = '';
+    cases.forEach(function (c) {
+      var tr = el('tr', c.refs.length ? null : 'gap');
+      tr.appendChild(el('td', 'id', c.id));
+      var tdT = el('td'); tdT.appendChild(el('span', 'tag t-' + c.type, c.type)); tr.appendChild(tdT);
+      tr.appendChild(el('td', null, c.expect));
+      var tdR = el('td');
+      if (!c.refs.length) tdR.appendChild(el('span', 'na', 'nothing \u2014 this case is untraceable'));
+      c.refs.forEach(function (r) { tdR.appendChild(chip(r)); });
+      tr.appendChild(tdR);
+      back.appendChild(tr);
+    });
+
+    var delta = document.getElementById('delta');
+    delta.textContent = '';
+    var rows = [];
+    var order = P.versions.map(function (v) { return v.id; });
+    var prior = order[order.indexOf(version) - 1];
+
+    P.references.forEach(function (r) {
+      if (r.since === version && prior) {
+        rows.push([r.ref, 'Added',
+          'New cases only. Nothing that existed in ' + prior + ' is affected. Added: ' +
+          ((byRef[r.ref] || []).map(function (c) { return c.id; }).join(', ') || 'none yet') + '.']);
+      } else if (r.revisedIn === version) {
+        /* Only a case that existed in the PRIOR version can be re-baselined.
+           A case introduced with the revision is a new case, not a superseded
+           agreement - conflating the two overstates the disruption. */
+        var affected = P.cases.filter(function (c) { return c.refs.indexOf(r.ref) !== -1; });
+        var rebaselined = affected.filter(function (c) { return c.applies.indexOf(prior) !== -1; });
+        var added = affected.filter(function (c) { return c.applies.indexOf(prior) === -1; });
+        rows.push([r.ref, 'Revised',
+          rebaselined.length + ' existing case(s) must be re-baselined against the revised wording - ' +
+          rebaselined.map(function (c) { return c.id; }).join(', ') +
+          ' - and ' + added.length + ' new case(s) cover the changed behaviour' +
+          (added.length ? ': ' + added.map(function (c) { return c.id; }).join(', ') : '') + '. ' +
+          (r.revision || '')]);
+      }
+    });
+    if (!rows.length) rows.push(['\u2014', 'No change', 'This is the baseline version.']);
+    rows.forEach(function (row) {
+      var tr = el('tr', row[1] === 'Revised' ? 'gap' : null);
+      tr.appendChild(el('td', 'id', row[0]));
+      tr.appendChild(el('td', null, row[1]));
+      tr.appendChild(el('td', null, row[2]));
+      delta.appendChild(tr);
+    });
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>

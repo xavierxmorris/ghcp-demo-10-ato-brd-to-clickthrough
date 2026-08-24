@@ -1,0 +1,121 @@
+
+  Lodge Assist — verification
+  BRD-2026-118 · executed in Microsoft Edge over file://
+  pack/harness consistency: 59 automatable cases, all implemented
+
+  v1.0  →  prototype\   (43 automated cases)
+  ------------------------------------------------------------------------
+  [ ok ] TC-001  REQ-001  service, period, due date and 3 benefits all present
+  [ ok ] TC-002  REQ-002  one action reaches scr-entity
+  [ ok ] TC-003  REQ-002  Step 1 of 4, Step 2 of 4, Step 3 of 4 — bar at 75%
+  [ ok ] TC-004  REQ-002  returned to scr-entity with values intact
+  [ ok ] TC-010  REQ-003  ABN, contact and email all captured
+  [ ok ] TC-011  REQ-007 BR-01  Enter the ABN for the reporting entity. (BR-01)
+  [ ok ] TC-012  BR-01  An ABN is eleven digits. (BR-01)
+  [ ok ] TC-013  BR-01  An ABN is eleven digits. (BR-01)
+  [ ok ] TC-014  BR-01  That ABN did not pass the check-digit test — check the digits. (BR-01)
+  [ ok ] TC-015  BR-01  26 262 626 210 accepted with spaces
+  [ ok ] TC-016  BR-02  Enter the name of the authorised contact. (BR-02)
+  [ ok ] TC-017  BR-02  1 refused, 2 accepted
+  [ ok ] TC-018  BR-03  That email address is not valid — check for a missing @ or domain. (BR-03)
+  [ ok ] TC-019  BR-03  That email address is not valid — check for a missing @ or domain. (BR-03)
+  [ ok ] TC-020  REQ-003 BR-03  valid details accepted
+  [ ok ] TC-025  REQ-004  G1 Total sales (including GST) · 1A GST on sales · 1B GST on purchases
+  [ ok ] TC-026  REQ-007 BR-04  3 labels refused, all citing BR-04
+  [ ok ] TC-027  BR-04  Whole dollars only — remove the cents. (BR-04)
+  [ ok ] TC-028  BR-04  This amount cannot be less than zero. (BR-04)
+  [ ok ] TC-029  BR-04  Use digits only, with no letters or symbols. (BR-04)
+  [ ok ] TC-030  BR-04  all three labels at zero accepted
+  [ ok ] TC-031  BR-05  1A = G1 accepted (equal is not exceeding)
+  [ ok ] TC-032  REQ-007 BR-05  GST on sales (1A) cannot be more than total sales (G1). (BR-05)
+  [ ok ] TC-033  BR-04  twelve accepted, thirteen refused — That amount is too large for this statement. (BR
+  [ ok ] TC-035  REQ-005  W1,W2,T7
+  [ ok ] TC-036  BR-06  W2 = W1 accepted
+  [ ok ] TC-037  REQ-007 BR-06  Amounts withheld (W2) cannot be more than salary and wages (W1). (BR-06)
+  [ ok ] TC-040  REQ-006 BR-07  $14,500 — Amount you owe the ATO — label 7A
+  [ ok ] TC-041  REQ-006 BR-07  $4,000 — Amount the ATO owes you — label 7B
+  [ ok ] TC-042  REQ-006 BR-07  $0 — Nil statement — nothing owed either way
+  [ ok ] TC-043  REQ-006  (1A $8,000 − 1B $3,200) + W2 $7,100 + T7 $2,600
+  [ ok ] TC-050  REQ-008  all eight entered values replayed exactly
+  [ ok ] TC-051  REQ-007 BR-08  Confirm the declaration before you lodge. (BR-08)
+  [ ok ] TC-052  REQ-008  LA-2026Q2-Z98CBN · Lodged 24 August 2026 at 3:19 pm · in a real service a receipt wo
+  [ ok ] TC-053  BR-09  144 resource requests, all file://
+  [ ok ] TC-054  REQ-002 BR-09  fields, errors, ARIA state and the overlay all cleared
+  [ ok ] TC-060  REQ-001 REQ-008  6/6 screens declare a reference
+  [ ok ] TC-061  REQ-008  6 screens, strip matched every one
+  [ ok ] TC-062  REQ-008  5 elements labelled, none clipped
+  [ ok ] TC-070  NFR-01  6 screens, every control at least 44 × 44
+  [ ok ] TC-071  NFR-03  text plus a "!" indicator
+  [ ok ] TC-072  NFR-02  aria-invalid=true and aria-describedby points at the message
+  [ ok ] TC-073  NFR-04  no clipping on any screen or error state at 390 × 844
+  [ ok ] console  no console or page errors
+  ------------------------------------------------------------------------
+  43/43 passed
+
+  v1.1  →  prototype-v2\   (59 automated cases)
+  ------------------------------------------------------------------------
+  [ ok ] TC-001  REQ-001  service, period, due date and 3 benefits all present
+  [ ok ] TC-002  REQ-002  one action reaches scr-entity
+  [ ok ] TC-003  REQ-002  Step 1 of 4, Step 2 of 4, Step 3 of 4 — bar at 75%
+  [ ok ] TC-004  REQ-002  returned to scr-entity with values intact
+  [ ok ] TC-005  REQ-002 REQ-009  total moves 4 → 5 when varying
+  [ ok ] TC-010  REQ-003  ABN, contact and email all captured
+  [ ok ] TC-011  REQ-007 BR-01  Enter the ABN for the reporting entity. (BR-01)
+  [ ok ] TC-012  BR-01  An ABN is eleven digits. (BR-01)
+  [ ok ] TC-013  BR-01  An ABN is eleven digits. (BR-01)
+  [ ok ] TC-014  BR-01  That ABN did not pass the check-digit test — check the digits. (BR-01)
+  [ ok ] TC-015  BR-01  26 262 626 210 accepted with spaces
+  [ ok ] TC-016  BR-02  Enter the name of the authorised contact. (BR-02)
+  [ ok ] TC-017  BR-02  1 refused, 2 accepted
+  [ ok ] TC-018  BR-03  That email address is not valid — check for a missing @ or domain. (BR-03)
+  [ ok ] TC-019  BR-03  That email address is not valid — check for a missing @ or domain. (BR-03)
+  [ ok ] TC-020  REQ-003 BR-03  valid details accepted
+  [ ok ] TC-025  REQ-004  G1 Total sales (including GST) · 1A GST on sales · 1B GST on purchases
+  [ ok ] TC-026  REQ-007 BR-04  3 labels refused, all citing BR-04
+  [ ok ] TC-027  BR-04  Whole dollars only — remove the cents. (BR-04)
+  [ ok ] TC-028  BR-04  This amount cannot be less than zero. (BR-04)
+  [ ok ] TC-029  BR-04  Use digits only, with no letters or symbols. (BR-04)
+  [ ok ] TC-030  BR-04  all three labels at zero accepted
+  [ ok ] TC-031  BR-05  1A = G1 accepted (equal is not exceeding)
+  [ ok ] TC-032  REQ-007 BR-05  GST on sales (1A) cannot be more than total sales (G1). (BR-05)
+  [ ok ] TC-033  BR-04  twelve accepted, thirteen refused — That amount is too large for this statement. (BR
+  [ ok ] TC-035  REQ-005  W1,W2,T7
+  [ ok ] TC-036  BR-06  W2 = W1 accepted
+  [ ok ] TC-037  REQ-007 BR-06  Amounts withheld (W2) cannot be more than salary and wages (W1). (BR-06)
+  [ ok ] TC-040  REQ-006 BR-07  $14,500 — Amount you owe the ATO — label 7A
+  [ ok ] TC-041  REQ-006 BR-07  $4,000 — Amount the ATO owes you — label 7B
+  [ ok ] TC-042  REQ-006 BR-07  $0 — Nil statement — nothing owed either way
+  [ ok ] TC-043  REQ-006  (1A $8,000 − 1B $3,200) + W2 $7,100 + T7 $2,600
+  [ ok ] TC-050  REQ-008  all eight entered values replayed exactly
+  [ ok ] TC-051  REQ-007 BR-08  Confirm the declaration before you lodge. (BR-08)
+  [ ok ] TC-052  REQ-008  LA-2026Q2-YFF3ZU · Lodged 24 August 2026 at 3:20 pm · in a real service a receipt wo
+  [ ok ] TC-053  BR-09  148 resource requests, all file://
+  [ ok ] TC-054  REQ-002 BR-09  fields, errors, ARIA state and the overlay all cleared
+  [ ok ] TC-060  REQ-001 REQ-008  7/7 screens declare a reference
+  [ ok ] TC-061  REQ-008  7 screens, strip matched every one
+  [ ok ] TC-062  REQ-008  5 elements labelled, none clipped
+  [ ok ] TC-070  NFR-01  7 screens, every control at least 44 × 44
+  [ ok ] TC-071  NFR-03  text plus a "!" indicator
+  [ ok ] TC-072  NFR-02  aria-invalid=true and aria-describedby points at the message
+  [ ok ] TC-073  NFR-04  no clipping on any screen or error state at 390 × 844
+  [ ok ] TC-074  NFR-02 BR-11  General interest charge warning. You have varied to 69.2% of your instalment. You mu
+  [ ok ] TC-080  REQ-009  Does this instalment suit your circumstances?
+  [ ok ] TC-081  REQ-009  T8, T9 and T4 all offered
+  [ ok ] TC-082  REQ-009  variation screen skipped
+  [ ok ] TC-083  REQ-007 BR-10  3 fields refused, all citing BR-10
+  [ ok ] TC-084  BR-10  Choose the reason you are varying the instalment. (BR-10)
+  [ ok ] TC-085  BR-11  2,210 of 2,600 is exactly 85% — no warning, progression allowed
+  [ ok ] TC-086  BR-11  warning shown, stated as 84.9% of the instalment
+  [ ok ] TC-087  REQ-007 BR-11  Confirm you understand the general interest charge. (BR-11) — then allowed once ackn
+  [ ok ] TC-088  REQ-006 BR-07  $13,700 — (1A $8,000 − 1B $3,200) + W2 $7,100 + T9 $1,800
+  [ ok ] TC-089  REQ-009 REQ-008  23 — Significant change in trading conditions · varied $2,600 → $1,800
+  [ ok ] TC-090  BR-10  zero accepted at T8 and T9 once the warning was acknowledged
+  [ ok ] TC-091  BR-10  Whole dollars only — remove the cents. (BR-10)
+  [ ok ] TC-092  BR-10  This amount cannot be less than zero. (BR-10)
+  [ ok ] TC-093  BR-11  no warning and no acknowledgement required when T7 is 0
+  [ ok ] console  no console or page errors
+  ------------------------------------------------------------------------
+  59/59 passed
+
+  TOTAL  102/102 passed  ·  results written to testing/test-pack/results.js and results.json
+

@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BRD-2026-118 — Lodge Assist: quarterly activity statement self-lodgment</title>
+<meta name="description" content="Business Requirements Document: guided quarterly Business Activity Statement lodgment for micro and small business. Illustrative demonstration document.">
+<style>
+  /* Deliberately self-contained. This document shares NO stylesheet, tokens or
+     markup with the prototype - it is an independent business input. */
+  :root {
+    --ink: #16181d;
+    --muted: #5b6270;
+    --rule: #d6dae2;
+    --band: #f2f4f8;
+    --accent: #0b3b5c;
+    --page: 210mm;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 28px 16px 56px;
+    background: #8f949e;
+    font-family: "Aptos", "Segoe UI", "Calibri", system-ui, sans-serif;
+    font-size: 10.2pt;
+    line-height: 1.42;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+  .page {
+    width: var(--page);
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 15mm 16mm 13mm;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,.28), 0 18px 50px rgba(0,0,0,.30);
+  }
+
+  .protective {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 9px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--rule);
+    font-size: 7.6pt;
+    font-weight: 700;
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .protective .marking { color: #0b3b5c; }
+  .protective .demo { color: #a3421c; }
+
+  .masthead {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 18px;
+    padding-bottom: 8px;
+    border-bottom: 2.5px solid var(--accent);
+  }
+  .masthead .doctype {
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .masthead h1 { margin: 3px 0 0; font-size: 16.5pt; line-height: 1.18; letter-spacing: -.2px; }
+  .masthead .sub { margin: 3px 0 0; font-size: 9pt; color: var(--muted); }
+  .masthead .ref { text-align: right; font-size: 8.4pt; color: var(--muted); white-space: nowrap; }
+  .masthead .ref b { display: block; font-size: 10pt; color: var(--ink); }
+
+  .control {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border: 1px solid var(--rule);
+    border-left: 0;
+    margin: 10px 0 12px;
+  }
+  .control div { padding: 5px 8px; border-left: 1px solid var(--rule); }
+  .control dt {
+    font-size: 7.4pt; font-weight: 700; letter-spacing: .7px;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .control dd { margin: 1px 0 0; font-size: 9pt; font-weight: 600; }
+  .status-approved { color: #0a7a4e; }
+
+  h2 {
+    margin: 12px 0 5px;
+    font-size: 10.4pt;
+    letter-spacing: .2px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  h2 .n { color: var(--muted); margin-right: 5px; font-weight: 600; }
+  p { margin: 0 0 6px; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0 22px; }
+
+  table { width: 100%; border-collapse: collapse; margin: 4px 0 2px; font-size: 9.2pt; }
+  th {
+    text-align: left;
+    background: var(--band);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 4px 7px;
+    font-size: 7.6pt;
+    letter-spacing: .7px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  td { padding: 4px 7px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  td.id { font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  td.pri { white-space: nowrap; font-weight: 600; font-size: 8.4pt; }
+  .must   { color: #b4231f; }
+  .should { color: #9a6210; }
+  code {
+    font-family: "Cascadia Mono", "Consolas", monospace;
+    font-size: 8.6pt;
+    background: var(--band);
+    padding: 0 3px;
+    border-radius: 2px;
+  }
+
+  ul { margin: 3px 0 6px; padding-left: 17px; }
+  li { margin: 0 0 2px; }
+
+  .swatches { display: flex; gap: 12px; margin: 4px 0 6px; flex-wrap: wrap; }
+  .swatches span { display: flex; align-items: center; gap: 5px; font-size: 8.6pt; font-variant-numeric: tabular-nums; }
+  .swatches i { width: 13px; height: 13px; border-radius: 3px; border: 1px solid rgba(0,0,0,.16); }
+
+  .note {
+    margin: 8px 0 0;
+    padding: 7px 10px;
+    background: var(--band);
+    border-left: 3px solid var(--accent);
+    font-size: 8.8pt;
+  }
+  .disclaimer {
+    margin: 10px 0 0;
+    padding: 7px 10px;
+    background: #fdf3e2;
+    border-left: 3px solid #d98014;
+    font-size: 8.4pt;
+    color: #6b4300;
+  }
+  .signoff {
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    font-size: 8.4pt;
+    color: var(--muted);
+  }
+
+  @media print {
+    body { background: #fff; padding: 0; }
+    .page { box-shadow: none; width: auto; padding: 0; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+
+  <div class="protective">
+    <span class="marking">OFFICIAL &mdash; DEMONSTRATION</span>
+    <span class="demo">Illustrative demonstration document &mdash; not an ATO publication</span>
+  </div>
+
+  <header class="masthead">
+    <div>
+      <div class="doctype">Business Requirements Document</div>
+      <h1>Lodge Assist &mdash; quarterly activity statement self-lodgment</h1>
+      <p class="sub">Australian Taxation Office (illustrative scenario) &middot; Digital Lodgment Program &middot; Small Business line</p>
+    </div>
+    <div class="ref">
+      <b>BRD-2026-118</b>
+      Version 1.0<br>
+      31 July 2026
+    </div>
+  </header>
+
+  <dl class="control">
+    <div><dt>Author</dt><dd>Xavier Morris, Business Analyst</dd></div>
+    <div><dt>Sponsor</dt><dd>Director, Digital Lodgment</dd></div>
+    <div><dt>Status</dt><dd class="status-approved">Approved for build</dd></div>
+    <div><dt>Release</dt><dd>FY27 Q2 &mdash; Oct&ndash;Dec 2026 quarter</dd></div>
+    <div><dt>Classification</dt><dd>OFFICIAL</dd></div>
+  </dl>
+
+  <h2><span class="n">1.</span> Purpose</h2>
+  <p>
+    Micro and small businesses that lodge their own quarterly Business Activity
+    Statement (BAS) do so today on a paper form or through a portal designed for
+    a desktop. In the last four quarters, 21% of self-prepared statements needed
+    a correction, and the single largest cause was an arithmetic error in the net
+    amount at labels 7A / 7B &mdash; a figure the lodger cannot see until after
+    they have lodged. The median time to correction was 17 days.
+  </p>
+  <p>
+    This document specifies the business requirements for a guided, mobile-first
+    activity statement lodgment journey that calculates and shows the net amount
+    <em>before</em> the lodger commits. It is to be delivered first as a
+    click-through prototype for stakeholder sign-off, ahead of build.
+  </p>
+
+  <div class="two-col">
+    <div>
+      <h2><span class="n">2.</span> In scope</h2>
+      <ul>
+        <li>Quarterly BAS, single reporting entity, self-lodger</li>
+        <li>GST labels G1, 1A, 1B</li>
+        <li>PAYG labels W1, W2 and PAYG instalment T7</li>
+        <li>Net amount calculation and display (7A / 7B)</li>
+        <li>Capture, review, declaration and confirmation of one statement</li>
+      </ul>
+    </div>
+    <div>
+      <h2><span class="n">3.</span> Out of scope</h2>
+      <ul>
+        <li>Authentication and identity proofing</li>
+        <li>Registered tax and BAS agent lodgment channels</li>
+        <li>Payment, payment plans and account balance</li>
+        <li>Amendments and revisions to a lodged statement</li>
+        <li>Fuel tax credits, WET, LCT and instalment notices</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2><span class="n">4.</span> Business requirements</h2>
+  <table>
+    <thead>
+      <tr><th style="width:62px">Ref</th><th>Requirement</th><th style="width:60px">Priority</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="id">REQ-001</td>
+        <td>The journey shall open with an introduction screen naming the service, stating the reporting period and due date being lodged, and stating its three headline benefits: figures are checked as they are entered, the net amount is shown before the statement is lodged, and a receipt number is issued immediately.</td>
+        <td class="pri must">Must</td>
+      </tr>
+      <tr>
+        <td class="id">REQ-002</td>
+        <td>The lodger shall be able to start the statement in a single action from the introduction screen, shall be able to see how far through the statement they are at every step, and shall be able to return to a previous step without losing entered data.</td>
+        <td class="pri must">Must</td>
+      </tr>
+      <tr>
+        <td class="id">REQ-003</td>
+        <td>The statement shall capture the reporting entity&rsquo;s ABN, the name of the authorised contact making the declaration, and a contact email address for the receipt.</td>
+        <td class="pri must">Must</td>
+      </tr>
+      <tr>
+        <td class="id">REQ-004</td>
+        <td>The statement shall capture the GST labels for the period: <code>G1</code> total sales including GST, <code>1A</code> GST on sales, and <code>1B</code> GST on purchases. Each label shall be displayed with its label code and its plain-English name.</td>
+        <td class="pri must">Must</td>
+      </tr>
+      <tr>
+        <td class="id">REQ-005</td>
+        <td>The statement shall capture the PAYG labels for the period: <code>W1</code> total salary, wages and other payments, <code>W2</code> amounts withheld from those payments, and <code>T7</code> the PAYG instalment amount for the quarter.</td>
+        <td class="pri must">Must</td>
+      </tr>
+      <tr>
+        <td class="id">REQ-006</td>
+        <td>The service shall calculate the net amount for the period and display it before lodgment, showing the arithmetic used and stating in plain English whether the amount is payable to the ATO (label <code>7A</code>) or refundable to the entity (label <code>7B</code>).</td>
+        <td class="pri must">Must</td>
+      </tr>
+      <tr>
+        <td class="id">REQ-007</td>
+        <td>The lodger shall be prevented from progressing while any mandatory field is missing or invalid, and shall be shown which field is at fault, why it was refused, and which business rule was applied.</td>
+        <td class="pri must">Must</td>
+      </tr>
+      <tr>
+        <td class="id">REQ-008</td>
+        <td>Before lodging, the lodger shall be shown a review screen displaying every label value they entered and the calculated net amount; they shall confirm the declaration; and on lodgment they shall be shown a confirmation screen containing the receipt number and the date and time of lodgment.</td>
+        <td class="pri must">Must</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2><span class="n">5.</span> Business rules</h2>
+  <table>
+    <thead>
+      <tr><th style="width:62px">Ref</th><th>Rule</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="id">BR-01</td><td>ABN is mandatory and must be eleven digits that pass the standard ABN check-digit algorithm. Spaces entered by the lodger are ignored.</td></tr>
+      <tr><td class="id">BR-02</td><td>Authorised contact name is mandatory and must be at least two characters.</td></tr>
+      <tr><td class="id">BR-03</td><td>Contact email is mandatory and must be a structurally valid address.</td></tr>
+      <tr><td class="id">BR-04</td><td>Every monetary label is mandatory, must be zero or greater, and must be a whole dollar amount. Cents are not accepted, and a label value may not exceed twelve digits. Dollar signs and thousands separators entered by the lodger are ignored.</td></tr>
+      <tr><td class="id">BR-05</td><td>GST on sales (<code>1A</code>) cannot exceed total sales including GST (<code>G1</code>).</td></tr>
+      <tr><td class="id">BR-06</td><td>Amounts withheld (<code>W2</code>) cannot exceed total salary, wages and other payments (<code>W1</code>).</td></tr>
+      <tr><td class="id">BR-07</td><td>The net amount is <code>(1A &minus; 1B) + W2 + T7</code>. Where the result is greater than zero it is reported at <code>7A</code> as an amount payable to the ATO; where it is less than zero it is reported at <code>7B</code> as an amount refundable to the entity; where it is exactly zero the statement is a nil result and neither label is reported.</td></tr>
+      <tr><td class="id">BR-08</td><td>The statement cannot be lodged until the declaration in REQ-008 is confirmed.</td></tr>
+      <tr><td class="id">BR-09</td><td>No statement data is transmitted, stored or lodged. This is a prototype for sign-off only.</td></tr>
+    </tbody>
+  </table>
+
+  <h2><span class="n">6.</span> Brand and visual direction</h2>
+  <p>
+    The journey shall use the existing Lodge Assist service design system without
+    modification &mdash; the same colour styles, type scale and spacing already in
+    use across the program. Target frame is 390 &times; 844. The primary user is a
+    sole trader or micro-business owner completing the statement on their own
+    phone, often outside business hours and frequently under time pressure near
+    the due date. Interactive targets must be at least 44 &times; 44 CSS pixels,
+    and the interface must meet WCAG 2.2 Level AA &mdash; in particular, no
+    error may be communicated by colour alone.
+  </p>
+  <div class="swatches">
+    <span><i style="background:#0b3b5c"></i> brand/600 #0B3B5C</span>
+    <span><i style="background:#10557f"></i> brand/500 #10557F</span>
+    <span><i style="background:#0f7b6c"></i> teal/500 #0F7B6C</span>
+    <span><i style="background:#10222f"></i> ink/900 #10222F</span>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th style="width:62px">Ref</th><th>Non-functional requirement</th><th style="width:60px">Priority</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="id">NFR-01</td><td>Every interactive control shall present a target of at least 44 &times; 44 CSS pixels.</td><td class="pri must">Must</td></tr>
+      <tr><td class="id">NFR-02</td><td>The interface shall meet WCAG 2.2 Level AA. In particular, a control that has been refused shall be programmatically marked as invalid and shall be programmatically associated with the message explaining why, and a message that appears without a change of context shall be announced to assistive technology.</td><td class="pri must">Must</td></tr>
+      <tr><td class="id">NFR-03</td><td>No error or refusal shall be signalled by colour alone. Every such message shall carry text and a non-colour indicator.</td><td class="pri must">Must</td></tr>
+      <tr><td class="id">NFR-04</td><td>The journey shall be presented in a 390 &times; 844 frame, and no content shall be clipped or made unreachable at that size in any state, including when every field on a screen has been refused at once. Content taller than the frame shall scroll and shall say so.</td><td class="pri must">Must</td></tr>
+    </tbody>
+  </table>
+  <h2><span class="n">7.</span> Acceptance criteria</h2>
+  <ul>
+    <li>A stakeholder can complete a quarterly statement end to end on a phone-sized screen without assistance.</li>
+    <li>Every screen traces to at least one requirement reference above, and the trace is visible in the running prototype.</li>
+    <li>Invalid input is refused with a visible, specific message naming the rule applied (REQ-007, BR-01 to BR-06).</li>
+    <li>The review screen shows the values the tester actually entered, not sample data (REQ-008).</li>
+    <li>The net amount shown matches an independent hand calculation of BR-07 for at least one payable, one refundable and one nil case.</li>
+  </ul>
+
+  <h2><span class="n">8.</span> Test and assurance</h2>
+  <p>
+    A test pack shall be produced from this document before build sign-off. Every
+    requirement and every business rule above shall have at least one test case
+    traced to it, and every test case shall name the reference it verifies.
+    Coverage in both directions &mdash; requirement to test, and test to
+    requirement &mdash; shall be reportable on demand. Negative and boundary
+    cases are required for every rule expressed as a limit or a comparison
+    (BR-01, BR-04, BR-05, BR-06, BR-07).
+  </p>
+
+  <p class="note">
+    <strong>Note for delivery:</strong> this is a sign-off prototype, not a
+    production build. No backend, no identity proofing, no data capture and no
+    integration with the lodgment or accounting systems. It exists so the business
+    can agree the journey before development is scheduled.
+  </p>
+
+  <p class="disclaimer">
+    <strong>Disclaimer.</strong> This document is a fictional artefact created to
+    demonstrate a way of working. It is not affiliated with, endorsed by, or
+    representative of the Australian Taxation Office. The organisation structure,
+    reference numbers, sponsor, statistics, thresholds and figures in it are
+    invented. Activity statement label codes are real identifiers, used here
+    because they make the example legible &mdash; not because this document
+    describes the real obligations, thresholds, eligibility or consequences
+    attached to them.
+    <strong>Nothing here is tax advice</strong> &mdash; for real obligations, see
+    ato.gov.au.
+  </p>
+
+  <div class="signoff">
+    <span>Prepared by Xavier Morris &middot; Business Analyst</span>
+    <span>BRD-2026-118 &middot; v1.0 &middot; Page 1 of 1</span>
+  </div>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lodge Assist — quarterly activity statement (prototype)</title>
+<meta name="description" content="Click-through prototype built from BRD-2026-118 v1.1. Illustrative demonstration — not an ATO service.">
+<link rel="stylesheet" href="../assets/screens.css">
+<link rel="stylesheet" href="prototype.css">
+</head>
+<body>
+
+<div class="stage" id="stage">
+
+  <p class="stage-warning" role="note">
+    <b>Demonstration prototype.</b> Not an ATO service. No data is sent, stored or lodged.
+    Figures, rules and thresholds are invented for the demo — this is not tax advice.
+  </p>
+
+  <div class="frame" id="frame">
+
+    <div class="official-bar"><i>Demo</i> Not an ATO service &middot; nothing is lodged</div>
+
+    <div class="status-bar">
+      <span id="clock">9:41</span>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="battery" aria-hidden="true"></span>
+    </div>
+
+    <!-- ================================================== screen 1 : intro -->
+    <section class="screen" id="scr-intro" data-req="REQ-001, REQ-002" data-screen="1">
+      <div class="frame-body">
+
+        <div class="brandmark" data-ref="REQ-001"><span class="glyph" aria-hidden="true"></span> Lodge Assist</div>
+
+        <p class="eyebrow" style="margin-top:16px">Business activity statement</p>
+        <h1 class="display">Lodge this quarter in <span class="grad">about five minutes</span></h1>
+        <p class="lede">Everything is worked out for you before you lodge. Nothing is sent until you confirm it.</p>
+
+        <div class="hero-art" data-ref="REQ-001">
+          <span class="orb orb-a" aria-hidden="true"></span>
+          <span class="orb orb-b" aria-hidden="true"></span>
+          <span class="orb orb-c" aria-hidden="true"></span>
+          <div class="hero-card">
+            <div class="row">
+              <span class="label">Reporting period</span>
+              <span class="pill pill-brand">Quarter 2</span>
+            </div>
+            <div class="row" style="margin-top:6px">
+              <span class="period">1 Oct &ndash; 31 Dec 2026</span>
+            </div>
+            <div class="bar" aria-hidden="true"></div>
+            <div class="row" style="margin-top:10px">
+              <span class="label">Due</span>
+              <span style="font-size:14px;font-weight:700">28 February 2027</span>
+            </div>
+          </div>
+        </div>
+
+        <ul class="value-list" data-ref="REQ-001">
+          <li><span class="tick" aria-hidden="true">&check;</span> Your figures are checked as you enter them</li>
+          <li><span class="tick" aria-hidden="true">&check;</span> You see what you owe before you lodge</li>
+          <li><span class="tick" aria-hidden="true">&check;</span> Your receipt number is issued straight away</li>
+        </ul>
+
+        <div class="frame-actions">
+          <button type="button" class="btn btn-primary" id="btnStart" data-ref="REQ-002">Start your statement</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================= screen 2 : entity -->
+    <section class="screen" id="scr-entity" data-req="REQ-002, REQ-003, REQ-007, BR-01, BR-02, BR-03" data-screen="2" hidden>
+      <div class="frame-body">
+
+        <nav class="frame-nav" data-ref="REQ-002">
+          <button type="button" class="nav-back" data-back aria-label="Back to the previous step">&#8592;</button>
+          <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="4" aria-valuenow="1" aria-label="Statement progress"><span style="width:25%"></span></div>
+          <span class="step-count">Step 1 of 4</span>
+        </nav>
+
+        <p class="eyebrow">Your business</p>
+        <h2 class="h2">Who is lodging this statement?</h2>
+        <p class="meta">We use these details to issue your receipt. Nothing is checked against the register in this prototype.</p>
+
+        <div class="field-stack">
+
+          <div class="field" id="f-abn" data-ref="REQ-003, BR-01">
+            <label for="abn">Australian Business Number</label>
+            <input type="text" id="abn" name="abn" inputmode="numeric" autocomplete="off"
+                   maxlength="14" placeholder="11 digits" aria-describedby="h-abn">
+            <p class="hint" id="h-abn">Eleven digits. Spaces are fine.</p>
+          </div>
+
+          <div class="field" id="f-contact" data-ref="REQ-003, BR-02">
+            <label for="contact">Authorised contact</label>
+            <input type="text" id="contact" name="contact" autocomplete="name"
+                   placeholder="Full name" aria-describedby="h-contact">
+            <p class="hint" id="h-contact">The person making the declaration.</p>
+          </div>
+
+          <div class="field" id="f-email" data-ref="REQ-003, BR-03">
+            <label for="email">Contact email</label>
+            <input type="text" id="email" name="email" inputmode="email" autocomplete="email"
+                   placeholder="name@business.com.au" aria-describedby="h-email">
+            <p class="hint" id="h-email">Your receipt number is sent here.</p>
+          </div>
+
+        </div>
+
+        <div class="frame-actions">
+          <button type="button" class="btn btn-primary" data-next>Continue</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================== screen 3 : GST -->
+    <section class="screen" id="scr-gst" data-req="REQ-004, REQ-007, BR-04, BR-05" data-screen="3" hidden>
+      <div class="frame-body">
+
+        <nav class="frame-nav" data-ref="REQ-002">
+          <button type="button" class="nav-back" data-back aria-label="Back to the previous step">&#8592;</button>
+          <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="4" aria-valuenow="2" aria-label="Statement progress"><span style="width:50%"></span></div>
+          <span class="step-count">Step 2 of 4</span>
+        </nav>
+
+        <p class="eyebrow">Goods and services tax</p>
+        <h2 class="h2">Your GST for the quarter</h2>
+        <p class="meta">Whole dollars only. Leave a label at 0 if it does not apply.</p>
+
+        <div class="field-stack label-sheet">
+
+          <div class="label-field" id="f-g1" data-ref="REQ-004, BR-04">
+            <span class="label-name"><span class="label-code">G1</span> <span class="lbl">Total sales <em>(including GST)</em></span></span>
+            <span class="money"><input type="text" id="g1" name="g1" inputmode="numeric" autocomplete="off" placeholder="0" aria-label="G1 total sales including GST"></span>
+          </div>
+
+          <div class="label-field" id="f-1a" data-ref="REQ-004, BR-04, BR-05">
+            <span class="label-name"><span class="label-code">1A</span> <span class="lbl">GST on sales</span></span>
+            <span class="money"><input type="text" id="a1" name="a1" inputmode="numeric" autocomplete="off" placeholder="0" aria-label="1A GST on sales"></span>
+          </div>
+
+          <div class="label-field" id="f-1b" data-ref="REQ-004, BR-04">
+            <span class="label-name"><span class="label-code">1B</span> <span class="lbl">GST on purchases</span></span>
+            <span class="money"><input type="text" id="b1" name="b1" inputmode="numeric" autocomplete="off" placeholder="0" aria-label="1B GST on purchases"></span>
+          </div>
+
+          <div class="calc" id="gstRunning" data-ref="REQ-006">
+            <div class="calc-head">GST net so far</div>
+            <p class="calc-working">1A <b id="rG1A">$0</b> &minus; 1B <b id="rG1B">$0</b></p>
+            <div class="calc-out is-nil">
+              <span class="who">GST for the period</span>
+              <span class="amount" id="rGstNet">$0</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="frame-actions">
+          <button type="button" class="btn btn-primary" data-next>Continue</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================== screen 4 : PAYG -->
+    <section class="screen" id="scr-payg" data-req="REQ-005, REQ-007, REQ-009, BR-04, BR-06" data-screen="4" hidden>
+      <div class="frame-body">
+
+        <nav class="frame-nav" data-ref="REQ-002">
+          <button type="button" class="nav-back" data-back aria-label="Back to the previous step">&#8592;</button>
+          <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="4" aria-valuenow="3" aria-label="Statement progress"><span style="width:75%"></span></div>
+          <span class="step-count">Step 3 of 4</span>
+        </nav>
+
+        <p class="eyebrow">Pay as you go</p>
+        <h2 class="h2">Withholding and instalments</h2>
+        <p class="meta">Whole dollars only. Leave a label at 0 if it does not apply.</p>
+
+        <div class="field-stack label-sheet">
+
+          <div class="label-field" id="f-w1" data-ref="REQ-005, BR-04">
+            <span class="label-name"><span class="label-code">W1</span> <span class="lbl">Total salary, wages and other payments</span></span>
+            <span class="money"><input type="text" id="w1" name="w1" inputmode="numeric" autocomplete="off" placeholder="0" aria-label="W1 total salary wages and other payments"></span>
+          </div>
+
+          <div class="label-field" id="f-w2" data-ref="REQ-005, BR-04, BR-06">
+            <span class="label-name"><span class="label-code">W2</span> <span class="lbl">Amounts withheld from those payments</span></span>
+            <span class="money"><input type="text" id="w2" name="w2" inputmode="numeric" autocomplete="off" placeholder="0" aria-label="W2 amounts withheld"></span>
+          </div>
+
+          <div class="label-field" id="f-t7" data-ref="REQ-005, BR-04">
+            <span class="label-name"><span class="label-code">T7</span> <span class="lbl">PAYG instalment for the quarter</span></span>
+            <span class="money"><input type="text" id="t7" name="t7" inputmode="numeric" autocomplete="off" placeholder="0" aria-label="T7 PAYG instalment for the quarter"></span>
+          </div>
+
+        </div>
+
+        <fieldset class="option-list" id="f-varyChoice" data-ref="REQ-009">
+          <legend class="eyebrow" style="margin:14px 0 8px">Does this instalment suit your circumstances?</legend>
+          <label class="option-card">
+            <input type="radio" name="vary" value="no" id="varyNo" checked>
+            <span class="oc-text">
+              <span class="oc-title">Yes &mdash; lodge the instalment as it is</span>
+              <span class="oc-sub">The amount at T7 reflects this quarter.</span>
+            </span>
+          </label>
+          <label class="option-card">
+            <input type="radio" name="vary" value="yes" id="varyYes">
+            <span class="oc-text">
+              <span class="oc-title">No &mdash; I want to vary it</span>
+              <span class="oc-sub">Your trading conditions or structure have changed.</span>
+            </span>
+          </label>
+        </fieldset>
+
+        <div class="frame-actions">
+          <button type="button" class="btn btn-primary" data-next>Continue</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== screen 5 : variation -->
+    <section class="screen" id="scr-vary" data-req="REQ-009, REQ-007, BR-04, BR-10, BR-11" data-screen="5" hidden>
+      <div class="frame-body">
+
+        <nav class="frame-nav" data-ref="REQ-002">
+          <button type="button" class="nav-back" data-back aria-label="Back to the previous step">&#8592;</button>
+          <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="4" aria-label="Statement progress"><span style="width:80%"></span></div>
+          <span class="step-count">Step 4 of 5</span>
+        </nav>
+
+        <p class="eyebrow">Vary your instalment</p>
+        <h2 class="h2">Tell us your revised figures</h2>
+        <p class="meta">Your instalment at T7 is <b id="varyBase">$0</b> for this quarter.</p>
+
+        <div class="scroll">
+          <div class="label-sheet" style="padding:2px 14px 6px">
+
+            <div class="label-field" id="f-t8" data-ref="REQ-009, BR-10">
+              <span class="label-name"><span class="label-code">T8</span> <span class="lbl">Estimated tax for the year</span></span>
+              <span class="money"><input type="text" id="t8" name="t8" inputmode="numeric" autocomplete="off" placeholder="0" aria-label="T8 estimated tax for the year"></span>
+            </div>
+
+            <div class="label-field" id="f-t9" data-ref="REQ-009, BR-10, BR-11">
+              <span class="label-name"><span class="label-code">T9</span> <span class="lbl">Varied amount for the quarter</span></span>
+              <span class="money"><input type="text" id="t9" name="t9" inputmode="numeric" autocomplete="off" placeholder="0" aria-label="T9 varied amount for the quarter"></span>
+            </div>
+          </div>
+
+          <div class="field" id="f-t4" data-ref="REQ-009, BR-10" style="margin-top:14px">
+            <label for="t4"><span class="label-code" style="margin-right:6px">T4</span>Reason for varying</label>
+            <select id="t4" name="t4" aria-describedby="h-t4">
+              <option value="">Choose a reason</option>
+              <option value="21">21 &mdash; Change in investments</option>
+              <option value="22">22 &mdash; Current business structure not continuing</option>
+              <option value="23">23 &mdash; Significant change in trading conditions</option>
+              <option value="24">24 &mdash; Internal business restructure</option>
+              <option value="25">25 &mdash; Change in legislation or product mix</option>
+              <option value="26">26 &mdash; Financial market changes</option>
+              <option value="27">27 &mdash; Use of income tax losses</option>
+            </select>
+            <p class="hint" id="h-t4">Pick the reason that best describes the change.</p>
+          </div>
+
+          <div class="callout callout-warn" id="gicWarning" data-ref="BR-11" hidden>
+            <span class="callout-title">General interest charge may apply</span>
+            You have varied to <b id="gicPct">0%</b> of your instalment. If the varied
+            amount turns out to be too low, a general interest charge can be applied to
+            the shortfall.
+            <div id="f-gicAck" data-ref="BR-11" style="margin-top:10px">
+              <label class="consent" style="margin-top:0;background:#fff">
+                <input type="checkbox" id="gicAck">
+                <span>I understand a general interest charge may apply.</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <p class="scroll-hint" id="varyScrollHint" hidden>More below &darr;</p>
+
+        <div class="frame-actions">
+          <button type="button" class="btn btn-primary" data-next>Continue</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================= screen 6 : review -->
+    <section class="screen" id="scr-review" data-req="REQ-006, REQ-008, BR-07, BR-08" data-screen="6" hidden>
+      <div class="frame-body">
+
+        <nav class="frame-nav" data-ref="REQ-002">
+          <button type="button" class="nav-back" data-back aria-label="Back to the previous step">&#8592;</button>
+          <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="5" aria-label="Statement progress"><span style="width:100%"></span></div>
+          <span class="step-count">Step 4 of 4</span>
+        </nav>
+
+        <p class="eyebrow">Check and lodge</p>
+        <h2 class="h2">Check your statement</h2>
+
+        <div class="scroll">
+
+          <div class="calc" id="netPanel" data-ref="REQ-006, BR-07">
+            <div class="calc-head">How this was worked out &mdash; BR-07</div>
+            <p class="calc-working" id="netWorking">&mdash;</p>
+            <div class="calc-out" id="netOut">
+              <span class="who" id="netWho">&mdash;</span>
+              <span class="amount" id="netAmount">$0</span>
+            </div>
+          </div>
+
+          <div class="summary" data-ref="REQ-008">
+            <div class="summary-head">Your business</div>
+            <dl>
+              <div class="item"><dt>ABN</dt><dd id="sAbn">&mdash;</dd></div>
+              <div class="item"><dt>Authorised contact</dt><dd id="sContact">&mdash;</dd></div>
+              <div class="item stack"><dt>Contact email</dt><dd id="sEmail">&mdash;</dd></div>
+              <div class="item"><dt>Period</dt><dd>Q2 &middot; Oct&ndash;Dec 2026</dd></div>
+            </dl>
+          </div>
+
+          <div class="summary" data-ref="REQ-004, REQ-008">
+            <div class="summary-head">Goods and services tax</div>
+            <dl>
+              <div class="item"><dt><span class="label-code">G1</span> Total sales</dt><dd id="sG1">&mdash;</dd></div>
+              <div class="item"><dt><span class="label-code">1A</span> GST on sales</dt><dd id="sA1">&mdash;</dd></div>
+              <div class="item"><dt><span class="label-code">1B</span> GST on purchases</dt><dd id="sB1">&mdash;</dd></div>
+            </dl>
+          </div>
+
+          <div class="summary" data-ref="REQ-005, REQ-008, REQ-009">
+            <div class="summary-head">Pay as you go</div>
+            <dl>
+              <div class="item"><dt><span class="label-code">W1</span> Salary and wages</dt><dd id="sW1">&mdash;</dd></div>
+              <div class="item"><dt><span class="label-code">W2</span> Amounts withheld</dt><dd id="sW2">&mdash;</dd></div>
+              <div class="item"><dt><span class="label-code">T7</span> PAYG instalment</dt><dd id="sT7">&mdash;</dd></div>
+              <div class="item" id="rowT8" hidden><dt><span class="label-code">T8</span> Estimated tax for the year</dt><dd id="sT8">&mdash;</dd></div>
+              <div class="item" id="rowT9" hidden><dt><span class="label-code">T9</span> Varied amount</dt><dd id="sT9">&mdash;</dd></div>
+              <div class="item stack" id="rowT4" hidden><dt><span class="label-code">T4</span> Reason for varying</dt><dd id="sT4">&mdash;</dd></div>
+            </dl>
+          </div>
+
+          <div class="callout" id="variedNotice" data-ref="REQ-009" hidden>
+            <span class="callout-title">Instalment varied</span>
+            You have varied this quarter&rsquo;s instalment from <b id="vFrom">$0</b>
+            to <b id="vTo">$0</b>. The varied amount is used in the calculation above
+            in place of T7 (BR-07).
+          </div>
+
+          <div id="f-declare" data-ref="REQ-008, BR-08">
+            <label class="consent">
+              <input type="checkbox" id="declare" name="declare">
+              <span>I declare that the information given on this statement is true and correct,
+                    and that I am authorised to make this declaration.</span>
+            </label>
+          </div>
+
+        </div>
+
+        <p class="scroll-hint" id="scrollHint">Scroll for the declaration &darr;</p>
+
+        <div class="frame-actions">
+          <button type="button" class="btn btn-primary" id="btnLodge" data-ref="REQ-008">Lodge statement</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================== screen 7 : done -->
+    <section class="screen" id="scr-done" data-req="REQ-008, BR-09" data-screen="7" hidden>
+      <div class="frame-body">
+        <div class="done-body">
+          <div class="seal" aria-hidden="true">&check;</div>
+          <p class="eyebrow" style="margin-bottom:6px">Quarter 2 &middot; Oct&ndash;Dec 2026</p>
+          <h2 class="display">Statement lodged</h2>
+          <p style="margin:8px 0 0"><span class="pill pill-warn">Simulated &middot; nothing was sent</span></p>
+          <p class="lede" id="doneLede" style="max-width:280px">&mdash;</p>
+          <p id="doneVaried" hidden style="margin:10px 0 0"><span class="pill pill-warn">Instalment varied</span></p>
+
+          <div class="receipt-chip" data-ref="REQ-008">
+            <div class="label">Receipt number</div>
+            <div class="value" id="receiptNo">&mdash;</div>
+          </div>
+          <p class="meta" style="margin-top:12px" id="lodgedAt">&mdash;</p>
+        </div>
+
+        <div class="frame-actions">
+          <button type="button" class="btn btn-ghost" id="btnRestart">Start another statement</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="home-indicator" aria-hidden="true"></div>
+  </div>
+
+  <!-- ============================================== traceability strip ==== -->
+  <div class="trace" data-ref="acceptance criterion 2">
+    <div class="trace-doc">Built from <b>BRD-2026-118 v1.1</b></div>
+    <p class="trace-line">
+      <b id="traceScreen">Screen 1 of 6</b>
+      <span class="sep">&middot;</span>
+      <span id="traceRefs"></span>
+    </p>
+    <label class="trace-toggle">
+      <input type="checkbox" id="refsToggle"> Show BRD refs on the screen
+    </label>
+  </div>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Acceptance test pack — BRD-2026-118 Lodge Assist</title>
+<link rel="stylesheet" href="pack.css">
+</head>
+<body>
+<main class="sheet">
+
+  <div class="protective">
+    <span class="marking">OFFICIAL &mdash; DEMONSTRATION</span>
+    <span class="demo">Illustrative demonstration artefact — not an ATO publication</span>
+  </div>
+
+  <header class="masthead">
+    <div class="kind">Acceptance test pack</div>
+    <h1 id="title">&mdash;</h1>
+    <p id="sub">&mdash;</p>
+  </header>
+
+  <nav class="pack-nav">
+    <a href="acceptance-pack.html" aria-current="page">Test pack</a>
+    <a href="traceability.html">Traceability</a>
+    <a href="test-data.html">Test data</a>
+    <a href="../../brd/ato-bas-lodgment-brd.html">BRD v1.0</a>
+    <a href="../../brd/ato-bas-lodgment-brd-v1.1.html">BRD v1.1</a>
+  </nav>
+
+  <div class="controls">
+    <strong>Document version</strong>
+    <span id="versionButtons"></span>
+    <strong style="margin-left:12px">Show</strong>
+    <span id="typeButtons"></span>
+  </div>
+
+  <div id="runbar" class="runbar stale">No automated run recorded yet. Run <b>node testing/verify.mjs</b>.</div>
+
+  <div class="stats" id="stats"></div>
+
+  <h2 class="sec" id="caseHeading">Cases</h2>
+  <table>
+    <thead>
+      <tr>
+        <th class="id" style="width:74px">Case</th>
+        <th style="width:118px">Verifies</th>
+        <th style="width:96px">Type</th>
+        <th>Precondition, steps and expected result</th>
+        <th style="width:210px">Automated result</th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+  <p class="disclaimer">
+    <strong>Disclaimer.</strong> This pack is written against a fictional
+    business requirements document created for a demonstration. It is not
+    affiliated with, endorsed by, or representative of the Australian Taxation
+    Office, and the rules, thresholds and figures it verifies are invented.
+    Nothing here is tax advice.
+  </p>
+
+  <footer class="pack-foot">
+    <span id="footLeft">&mdash;</span>
+    <span>Generated from <code>testing/test-pack/cases.js</code> &mdash; the same source the automation reads.</span>
+  </footer>
+
+</main>
+
+<script src="cases.js"></script>
+<script src="results.js" onerror="window.__noResults=true"></script>
+<script>
+(function () {
+  'use strict';
+  var P = window.ATO_TEST_PACK;
+  var R = window.ATO_TEST_RESULTS || null;
+
+  var version = P.versions[P.versions.length - 1].id;
+  var typeFilter = 'all';
+
+  var TYPES = ['all', 'positive', 'negative', 'boundary', 'calculation', 'traceability', 'accessibility'];
+
+  document.getElementById('title').textContent = P.document + ' \u2014 ' + P.title;
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+
+  function refChip(ref) {
+    var b = el('span', 'ref' + (/^(BR|NFR)-/.test(ref) ? ' br' : ''), ref);
+    return b;
+  }
+
+  function buildButtons(host, values, current, onPick, label) {
+    host.textContent = '';
+    values.forEach(function (v) {
+      var b = el('button', null, label ? label(v) : v);
+      b.setAttribute('aria-pressed', String(v === current));
+      b.addEventListener('click', function () { onPick(v); });
+      host.appendChild(b);
+    });
+  }
+
+  function applicable() {
+    return P.cases.filter(function (c) {
+      return c.applies.indexOf(version) !== -1 &&
+             (typeFilter === 'all' || c.type === typeFilter);
+    });
+  }
+
+  function resultFor(id) {
+    if (!R || !R.versions[version]) return { status: 'notrun', detail: 'no run recorded' };
+    return R.versions[version][id] || { status: 'notrun', detail: 'not in the last run' };
+  }
+
+  function renderRunbar() {
+    var bar = document.getElementById('runbar');
+    if (!R) {
+      bar.className = 'runbar stale';
+      bar.innerHTML = 'No automated run recorded. Run <b>node testing/verify.mjs</b> to fill this in.';
+      return;
+    }
+    var v = R.versions[version] || {};
+    var ids = Object.keys(v).filter(function (k) { return k.indexOf('__') !== 0; });
+    var pass = ids.filter(function (k) { return v[k].status === 'pass'; }).length;
+    var failed = ids.length - pass;
+    bar.className = 'runbar' + (failed ? ' has-fail' : '');
+    bar.innerHTML =
+      '<b>' + pass + ' of ' + ids.length + '</b> automated cases passed for ' + version +
+      ' &middot; ' + R.browser +
+      ' &middot; run ' + new Date(R.ranAt).toLocaleString('en-AU') +
+      (failed ? ' &middot; <b>' + failed + ' failing</b>' : '');
+  }
+
+  function renderStats() {
+    var host = document.getElementById('stats');
+    host.textContent = '';
+    var all = P.cases.filter(function (c) { return c.applies.indexOf(version) !== -1; });
+    var refs = P.references.filter(function (r) {
+      return !r.since || r.since === 'v1.0' || r.since === version;
+    });
+    var covered = refs.filter(function (r) {
+      return (P.refIndex[r.ref].cases || []).some(function (id) {
+        var c = P.cases.filter(function (x) { return x.id === id; })[0];
+        return c && c.applies.indexOf(version) !== -1;
+      });
+    }).length;
+
+    [['Cases', all.length],
+     ['Automated', all.filter(function (c) { return c.auto; }).length],
+     ['Negative & boundary', all.filter(function (c) { return c.type === 'negative' || c.type === 'boundary'; }).length],
+     ['References', refs.length],
+     ['Covered', covered + ' / ' + refs.length]
+    ].forEach(function (s) {
+      var d = el('div', 'stat');
+      d.appendChild(el('div', 'n', String(s[1])));
+      d.appendChild(el('div', 'k', s[0]));
+      host.appendChild(d);
+    });
+  }
+
+  function renderRows() {
+    var body = document.getElementById('rows');
+    body.textContent = '';
+    var cases = applicable();
+    document.getElementById('caseHeading').textContent =
+      cases.length + ' case' + (cases.length === 1 ? '' : 's') + ' for ' + version;
+
+    cases.forEach(function (c) {
+      var tr = el('tr');
+
+      tr.appendChild(el('td', 'id', c.id));
+
+      var tdRef = el('td');
+      c.refs.forEach(function (r) { tdRef.appendChild(refChip(r)); });
+      tr.appendChild(tdRef);
+
+      var tdType = el('td');
+      tdType.appendChild(el('span', 'tag t-' + c.type, c.type));
+      tr.appendChild(tdType);
+
+      var tdBody = el('td');
+      tdBody.appendChild(el('div', null, c.pre));
+      var ol = el('ol', 'steps');
+      c.steps.forEach(function (s) { ol.appendChild(el('li', null, s)); });
+      tdBody.appendChild(ol);
+      var exp = el('div', null, '');
+      exp.innerHTML = '<b>Expected:</b> ' + c.expect;
+      exp.style.marginTop = '4px';
+      tdBody.appendChild(exp);
+      if (c.rebaselined && c.rebaselined === version) {
+        tdBody.appendChild(el('p', 'note',
+          'Re-baselined at ' + version + ': the rule this case verifies was revised, so the previously agreed expected result was reviewed and re-confirmed.'));
+      }
+      if (c.note) tdBody.appendChild(el('p', 'note', c.note));
+      tr.appendChild(tdBody);
+
+      var tdRes = el('td');
+      if (!c.auto) {
+        tdRes.appendChild(el('span', 'status s-manual', 'Manual'));
+      } else {
+        var r = resultFor(c.id);
+        var cls = r.status === 'pass' ? 's-pass' : (r.status === 'fail' ? 's-fail' : 's-notrun');
+        tdRes.appendChild(el('span', 'status ' + cls, r.status));
+        if (r.detail) tdRes.appendChild(el('span', 'detail', r.detail));
+      }
+      tr.appendChild(tdRes);
+
+      body.appendChild(tr);
+    });
+  }
+
+  function render() {
+    var spec = P.versions.filter(function (v) { return v.id === version; })[0];
+    document.getElementById('sub').textContent =
+      spec.id + ' \u00b7 ' + spec.date + ' \u00b7 verified against ' + spec.target + '\\ \u00b7 ' + spec.note;
+    document.getElementById('footLeft').textContent =
+      P.document + ' ' + spec.id + ' \u00b7 ' + P.cases.length + ' cases in the pack';
+
+    buildButtons(document.getElementById('versionButtons'),
+      P.versions.map(function (v) { return v.id; }), version,
+      function (v) { version = v; render(); });
+
+    buildButtons(document.getElementById('typeButtons'), TYPES, typeFilter,
+      function (t) { typeFilter = t; render(); },
+      function (t) { return t === 'all' ? 'All' : t.charAt(0).toUpperCase() + t.slice(1); });
+
+    renderRunbar();
+    renderStats();
+    renderRows();
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>
