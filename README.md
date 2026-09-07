@@ -14,6 +14,12 @@ No install, no server, no framework, no design-tool licence, no network. The
 pages run straight off the filesystem, so this works on a locked-down laptop and
 on conference wifi that has given up.
 
+**Go deeper:** [WORKSHOP.md](WORKSHOP.md) adds a 60-minute BA/tester lab:
+independent arithmetic, exact threshold cases, evidence freshness, and
+classification of failures against the committed alternate build. Offline
+replay needs only the local pages; fresh automation additionally needs Node,
+the declared `playwright-core` dependency, and Edge.
+
 > ### ⚠️ This is a demonstration, not an ATO service
 > **Lodge Assist is fictional.** This repository is not affiliated with, endorsed
 > by, or representative of the Australian Taxation Office. The program, sponsor,
@@ -131,11 +137,14 @@ grid-squash defect it found on the way.
 Then the **committed** suite was pointed at it:
 
 ```powershell
-node testing\verify.mjs v1.0 --target=prototype-live   # 27 / 43
+node testing\verify.mjs v1.0 --target=prototype-rebuild
 ```
 
-**Sixteen failures, and not one of them was a defect in the build.** An
-independent walk confirmed the net amount is $14,500 — matching a hand
+The captured run scored **27/43**. The saved copy is `prototype-rebuild`;
+`prototype-live` is the output folder for a new local generation run.
+The captured investigation attributed the sixteen failures to test-contract
+assumptions rather than the demonstrated business calculations. A separate
+walk confirmed the net amount is $14,500 — matching a hand
 calculation of BR-07 — with all 7 screens traced, the frame at exactly
 390 × 844, zero network requests and zero console errors.
 
@@ -150,9 +159,9 @@ Two things follow, and they are the honest ones:
 
 - **Test the journey, not the prose.** `netAmount === 14500` survives a rebuild.
   `/owe the ATO/` tests my English.
-- **A red suite is not a broken build.** Sixteen red lines, zero defects. A test
-  lead who reports "27/43, it's broken" without reading the failures has done
-  real damage.
+- **A red suite requires triage.** Classify each failure against the BRD,
+  selector contract, and actual behavior. Neither "27/43 means the app is
+  broken" nor "these are all harmless" follows from the score alone.
 
 And one caveat that matters: the run read `prototype-v2/index.html` early on, and
 34 of its 72 element ids match mine. **This was not a clean room** — some of the
@@ -196,13 +205,19 @@ because the prompt asked for it. Full analysis in
 | `.\go.ps1 -Tester` | The tester track. |
 | `.\go.ps1 -Manual` | **Presenting live.** Enter advances each beat, so questions can't run down the clock. |
 | `.\go.ps1 -Check` | Pre-flight before you walk on stage. Exits 0/1, CI-safe, prints the measured facts — or **STALE** if anything changed since the last run. |
-| `.\go.ps1 -Verify` | Re-run every check for real. Needs Node and Edge. |
+| `.\go.ps1 -Verify` | Re-run every check. Needs Node and Edge; without installed `playwright-core`, its bootstrap downloads an unspecified package version and may rewrite dependency files. |
 | `node testing\verify.mjs v1.0 --target=<folder>` | Point the committed suite at a different build of the same document. Never writes results. |
 | `.\go.ps1 -NoBrowser` | Rehearsing the words without opening windows. |
 | `.\go.ps1 -Live` | Workshop mode — Copilot really rebuilds the app from the BRD into `prototype-live\`. Budget 20–30 minutes. **Commit first:** the only thing keeping it out of `prototype\` is an instruction in the prompt, not a sandbox. |
 
 Presenter script, beat by beat, with the awkward questions answered:
 **[`RUN-SHEET.md`](./RUN-SHEET.md)**.
+
+For a fresh automation environment, run `npm install` from the repository root
+first to honor `package.json`'s declared dependency range. This requires network
+access and may create/update a lockfile. Then `-Verify` uses the installed
+dependency; it still rewrites the saved result artifacts. A version range is
+not a pinned version, so record `npm ls playwright-core` for the run.
 
 Prefer to skip the terminal? Open these in order:
 
@@ -255,9 +270,9 @@ And for a tester:
 │   └── screens.css                 the Lodge Assist design system, reused unmodified
 ├── prototype/                      built from BRD v1.0  - 6 screens
 ├── prototype-v2/                   built from BRD v1.1  - 7 screens, one conditional
-├── prototype-rebuild/              an INDEPENDENT rebuild from BRD v1.0, produced by
+├── prototype-rebuild/              a separate rebuild from BRD v1.0, produced by
 │                                   one unattended .\go.ps1 -Live run. Scores 27/43
-│                                   against the committed suite - see the README
+│                                   in the captured run; not a clean-room build
 ├── testing/
 │   ├── verify.mjs                  102 checks, real browser, exits 0/1
 │   ├── smoke.mjs                   a visual walk that screenshots every screen
@@ -321,8 +336,9 @@ Worth being straight about these if anyone asks — the demo is stronger for it.
 - **`go.ps1` quotes no hard-coded results.** Every figure comes from
   `results.json`, and if any tested file is newer than the run it prints
   **STALE** and no number at all.
-- **102 checks is not "fully tested".** It is complete against BRD-2026-118 and
-  nothing more. Coverage of *references* is not coverage of *risk* — and
+- **102 checks is not "fully tested".** It covers the registered automatable
+  cases; it does not establish every interpretation of BRD-2026-118.
+  Coverage of *references* is not coverage of *risk* — and
   `NFR-02` cites WCAG 2.2 AA, but four automated cases verify four specific
   criteria, not conformance.
 - **Three of the six defects were found by review, not by the suite** — including
