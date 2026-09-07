@@ -213,11 +213,19 @@ because the prompt asked for it. Full analysis in
 Presenter script, beat by beat, with the awkward questions answered:
 **[`RUN-SHEET.md`](./RUN-SHEET.md)**.
 
-For a fresh automation environment, run `npm install` from the repository root
-first to honor `package.json`'s declared dependency range. This requires network
-access and may create/update a lockfile. Then `-Verify` uses the installed
-dependency; it still rewrites the saved result artifacts. A version range is
-not a pinned version, so record `npm ls playwright-core` for the run.
+For a fresh automation environment, run `npm ci` from the repository root.
+The committed lockfile fixes the resolved browser-tooling version; installation
+still needs network access. Then `-Verify` uses the installed dependency and
+rewrites saved result artifacts. Use `npm run verify -- --no-write-results` to
+run fresh checks without replacing that saved evidence.
+
+CI runs `npm run test:contract` and both versions of `npm run verify` in real
+Edge on Windows. Duplicate IDs, disabled implemented cases, unknown references
+or versions, untraced references in any applicable version, and empty case
+selections fail before browser execution. Explicit manual cases remain valid
+traceability evidence; they are not silently counted as automated passes.
+Historical result files are removed in the disposable CI checkout before the
+run, so uploaded seven-day artifacts cannot be mistaken for old evidence.
 
 Prefer to skip the terminal? Open these in order:
 

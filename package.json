@@ -6,6 +6,7 @@
   "description": "An ATO-style BRD becomes a working click-through app and a traced test pack that runs itself. Illustrative demonstration - not an ATO service.",
   "license": "MIT",
   "scripts": {
+    "test:contract": "node --test testing/pack-contract.test.mjs",
     "verify": "node testing/verify.mjs",
     "verify:v1": "node testing/verify.mjs v1.0",
     "verify:v2": "node testing/verify.mjs v1.1",

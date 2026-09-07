@@ -24,12 +24,16 @@ Fresh execution needs Node, Microsoft Edge, and the dependency declared in
 Inspect the installed version with `npm ls playwright-core`. The replay does
 not need those tools or network access.
 
-On a fresh clone, run `npm install` from the repository root first to honor
-the declared range, then inspect the resolved version. Installation requires
-network access and may create or update a lockfile. If `playwright-core` is
+On a fresh clone, run `npm ci` from the repository root to use the committed
+lockfile, then inspect the resolved version. Installation requires network
+access but does not update the lockfile. If `playwright-core` is
 absent, `-Verify` instead runs an unspecified `npm install playwright-core`,
 which can update `package.json` as well as the lockfile. Do not treat that
 bootstrap as a pinned or non-writing check.
+
+The new CI path runs the contract tests and both browser versions after a locked
+install. Locally, `npm run verify -- --no-write-results` preserves saved result
+files while still executing every selected assertion.
 
 ## 2. Trace a requirement through the evidence - 10 minutes
 

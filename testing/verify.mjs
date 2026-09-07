@@ -16,6 +16,7 @@ import { chromium } from 'playwright-core';
 import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { checkPackAgainstHarness } from './pack-contract.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..');
@@ -32,7 +33,7 @@ const only = argv.find(a => /^v\d/.test(a));
    selector contract in test-data.html being cashed in: an independently
    generated prototype should pass the committed suite unmodified. */
 const targetOverride = (argv.find(a => a.startsWith('--target=')) || '').split('=')[1];
-const WRITE_RESULTS = !targetOverride;
+const WRITE_RESULTS = !targetOverride && !argv.includes('--no-write-results');
 
 const VALID_ABN = '26 262 626 210';
 const BAD_ABN   = '26 262 626 211';
@@ -953,24 +954,6 @@ const T = {
    expected VALUES are written independently on purpose - a hand calculation in
    the case text and an assertion in code are two witnesses, not one. What must
    never drift is the case list itself, so that is checked before anything runs. */
-function checkPackAgainstHarness() {
-  const problems = [];
-  const implemented = new Set(Object.keys(T));
-  const declared = new Set(PACK.cases.map(c => c.id));
-
-  PACK.cases.filter(c => c.auto).forEach(c => {
-    if (!implemented.has(c.id)) problems.push(`${c.id} is marked automatable in cases.js but has no implementation`);
-  });
-  implemented.forEach(id => {
-    if (!declared.has(id)) problems.push(`${id} is implemented here but does not exist in cases.js`);
-  });
-  PACK.cases.forEach(c => {
-    if (!c.refs || !c.refs.length) problems.push(`${c.id} names no document reference`);
-    if (!c.applies || !c.applies.length) problems.push(`${c.id} applies to no version`);
-  });
-  return problems;
-}
-
 async function runVersion(browser, version) {
   const spec = PACK.versions.find(v => v.id === version);
   const target = targetOverride || spec.target;
@@ -1024,7 +1007,10 @@ async function runVersion(browser, version) {
 console.log('\n  Lodge Assist — verification');
 console.log(`  ${PACK.document} · executed in Microsoft Edge over file://`);
 
-const drift = checkPackAgainstHarness();
+const drift = checkPackAgainstHarness(PACK, Object.keys(T));
+if (only && !PACK.versions.some(version => version.id === only)) {
+  drift.push(`Unknown requested version: ${only}`);
+}
 if (drift.length) {
   console.log('\n  [FAIL] the test pack and this harness have drifted apart:');
   drift.forEach(p => console.log(`         ${p}`));
@@ -1044,7 +1030,7 @@ for (const v of versions) {
 }
 await browser.close();
 
-const green = passed === total && consoleClean;
+const green = total > 0 && passed === total && consoleClean;
 
 /* Summarise the pack itself alongside the run, so anything that wants to quote
    a number (go.ps1, CI, a slide) has exactly one place to read it from. */
@@ -1077,6 +1063,7 @@ const out = {
   inputs: [
     'testing/test-pack/cases.js',
     'testing/verify.mjs',
+    'testing/pack-contract.mjs',
     'prototype/index.html', 'prototype/app.js', 'prototype/prototype.css',
     'prototype-v2/index.html', 'prototype-v2/app.js', 'prototype-v2/prototype.css',
     'assets/screens.css'
@@ -1098,12 +1085,12 @@ fs.writeFileSync(
   JSON.stringify(out, null, 2) + '\n'
 );
 } else {
-  console.log('\n  --target given: results NOT written, the committed baseline is untouched.');
+  console.log('\n  Results NOT written (--target or --no-write-results); committed evidence is untouched.');
 }
 
 console.log(`\n  TOTAL  ${passed}/${total} passed` +
             (consoleClean ? '' : '  ·  CONSOLE ERRORS PRESENT') +
             (WRITE_RESULTS
               ? '  ·  results written to testing/test-pack/results.js and results.json'
-              : '  ·  results NOT written (--target)') + '\n');
+              : '  ·  results NOT written (--target or --no-write-results)') + '\n');
 process.exit(green ? 0 : 1);
