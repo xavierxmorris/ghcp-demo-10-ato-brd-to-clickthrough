@@ -13,6 +13,6 @@
     "smoke": "node testing/smoke.mjs prototype"
   },
   "dependencies": {
-    "playwright-core": "^1.57.0"
+    "playwright-core": "^1.62.1"
   }
 }
